@@ -1,1063 +1,1312 @@
-import * as b from "react";
-import * as O from "react/jsx-runtime";
+import * as React from "react";
+import * as Jsx from "react/jsx-runtime";
+import confetti from "canvas-confetti";
 import {
-  motion as Q,
-  AnimatePresence as Wp,
-  useScroll as kg,
-  useSpring as Lg,
-  useTransform as Ng,
+  motion,
+  AnimatePresence,
+  useScroll,
+  useSpring,
+  useTransform,
 } from "framer-motion";
 import Credit from "./Credit";
 
-var Rg = (...e) =>
-  e
-    .filter((e, t, n) => !!e && e.trim() !== `` && n.indexOf(e) === t)
-    .join(` `)
+const cx = (...args) =>
+  args
+    .filter((e, idx, arr) => !!e && e.trim() !== "" && arr.indexOf(e) === idx)
+    .join(" ")
     .trim();
-var zg = (e) => e.replace(/([a-z0-9])([A-Z])/g, `$1-$2`).toLowerCase();
-var Bg = (e) =>
-  e.replace(/^([A-Z])|[\s-_]+(\w)/g, (e, t, n) =>
-    n ? n.toUpperCase() : t.toLowerCase(),
-  );
-var Vg = (e) => {
-  let t = Bg(e);
+
+const kebabCase = (e) => e.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+const camelCase = (e) =>
+  e.replace(/^([A-Z])|[\s-_]+(\w)/g, (_, t, n) => (n ? n.toUpperCase() : t.toLowerCase()));
+const pascalCase = (e) => {
+  const t = camelCase(e);
   return t.charAt(0).toUpperCase() + t.slice(1);
 };
-var Hg = {
-  xmlns: `http://www.w3.org/2000/svg`,
+
+const svgBase = {
+  xmlns: "http://www.w3.org/2000/svg",
   width: 24,
   height: 24,
-  viewBox: `0 0 24 24`,
-  fill: `none`,
-  stroke: `currentColor`,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
   strokeWidth: 2,
-  strokeLinecap: `round`,
-  strokeLinejoin: `round`,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
 };
-var Ug = (e) => {
-  for (let t in e)
-    if (t.startsWith(`aria-`) || t === `role` || t === `title`) return !0;
-  return !1;
+
+const hasAria = (e) => {
+  for (const t in e) {
+    if (t.startsWith("aria-") || t === "role" || t === "title") return true;
+  }
+  return false;
 };
-var Wg = (0, b.forwardRef)(
-  (
-    {
-      color: e = `currentColor`,
-      size: t = 24,
-      strokeWidth: n = 2,
-      absoluteStrokeWidth: r,
-      className: i = ``,
-      children: a,
-      iconNode: o,
-      ...s
-    },
-    c,
-  ) =>
-    (0, b.createElement)(
-      `svg`,
+
+const createIcon = (name, iconNode) => {
+  const Component = React.forwardRef(
+    (
       {
-        ref: c,
-        ...Hg,
-        width: t,
-        height: t,
-        stroke: e,
-        strokeWidth: r ? (Number(n) * 24) / Number(t) : n,
-        className: Rg(`lucide`, i),
-        ...(!a && !Ug(s) && { "aria-hidden": `true` }),
-        ...s,
+        color = "currentColor",
+        size = 24,
+        strokeWidth = 2,
+        absoluteStrokeWidth,
+        className = "",
+        children,
+        ...rest
       },
-      [
-        ...o.map(([e, t]) => (0, b.createElement)(e, t)),
-        ...(Array.isArray(a) ? a : [a]),
-      ],
-    ),
-);
-var Gg = (e, t) => {
-  let n = (0, b.forwardRef)(({ className: n, ...r }, i) =>
-    (0, b.createElement)(Wg, {
-      ref: i,
-      iconNode: t,
-      className: Rg(`lucide-${zg(Vg(e))}`, `lucide-${e}`, n),
-      ...r,
-    }),
-  );
-  return ((n.displayName = Vg(e)), n);
-};
-var Kg = Gg(`calendar-plus`, [
-  [`path`, { d: `M16 19h6`, key: `xwg31i` }],
-  [`path`, { d: `M16 2v4`, key: `4m81vk` }],
-  [`path`, { d: `M19 16v6`, key: `tddt3s` }],
-  [
-    `path`,
-    {
-      d: `M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5`,
-      key: `1glfrc`,
-    },
-  ],
-  [`path`, { d: `M3 10h18`, key: `8toen8` }],
-  [`path`, { d: `M8 2v4`, key: `1cmpym` }],
-]);
-var qg = Gg(`chevron-down`, [[`path`, { d: `m6 9 6 6 6-6`, key: `qrunsl` }]]);
-var Jg = Gg(`clock`, [
-  [`circle`, { cx: `12`, cy: `12`, r: `10`, key: `1mglay` }],
-  [`path`, { d: `M12 6v6l4 2`, key: `mmk7yg` }],
-]);
-var Yg = Gg(`heart`, [
-  [
-    `path`,
-    {
-      d: `M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5`,
-      key: `mvr1a0`,
-    },
-  ],
-]);
-var Xg = Gg(`map-pin`, [
-  [
-    `path`,
-    {
-      d: `M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0`,
-      key: `1r0f0z`,
-    },
-  ],
-  [`circle`, { cx: `12`, cy: `10`, r: `3`, key: `ilqhr7` }],
-]);
-var Zg = Gg(`navigation`, [
-  [`polygon`, { points: `3 11 22 2 13 21 11 13 3 11`, key: `1ltx0t` }],
-]);
-var Qg = Gg(`sparkles`, [
-  [
-    `path`,
-    {
-      d: `M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z`,
-      key: `1s2grr`,
-    },
-  ],
-  [`path`, { d: `M20 2v4`, key: `1rf3ol` }],
-  [`path`, { d: `M22 4h-4`, key: `gwowj6` }],
-  [`circle`, { cx: `4`, cy: `20`, r: `2`, key: `6kqj1y` }],
-]);
-function $g({ className: e = ``, intensity: t = 1 }) {
-  return (0, O.jsxs)(`div`, {
-    "aria-hidden": !0,
-    className: `pointer-events-none absolute inset-0 overflow-hidden ${e}`,
-    style: { opacity: t },
-    children: [
-      (0, O.jsx)(`div`, {
-        className: `absolute -top-1/3 left-[-20%] h-[80%] w-[90%] rounded-full blur-3xl`,
-        style: {
-          background: `radial-gradient(circle at 50% 50%, oklch(0.55 0.13 160 / 0.55), transparent 65%)`,
-          animation: `aurora-drift 18s ease-in-out infinite`,
-        },
-      }),
-      (0, O.jsx)(`div`, {
-        className: `absolute top-[10%] right-[-25%] h-[75%] w-[85%] rounded-full blur-3xl`,
-        style: {
-          background: `radial-gradient(circle at 50% 50%, oklch(0.8 0.12 85 / 0.5), transparent 65%)`,
-          animation: `aurora-drift 24s ease-in-out infinite reverse`,
-        },
-      }),
-      (0, O.jsx)(`div`, {
-        className: `absolute bottom-[-25%] left-[10%] h-[70%] w-[80%] rounded-full blur-3xl`,
-        style: {
-          background: `radial-gradient(circle at 50% 50%, oklch(0.52 0.16 18 / 0.4), transparent 65%)`,
-          animation: `aurora-drift 30s ease-in-out infinite`,
-        },
-      }),
-      (0, O.jsx)(`div`, {
-        className: `absolute inset-0 mix-blend-soft-light`,
-        style: {
-          backgroundImage: `radial-gradient(oklch(0.98 0.02 92 / 0.35) 1px, transparent 1px)`,
-          backgroundSize: `22px 22px`,
-        },
-      }),
-    ],
-  });
-}
-function e_({ count: e = 14, burst: t = !1 }) {
-  return (0, O.jsx)(`div`, {
-    "aria-hidden": !0,
-    className: `pointer-events-none absolute inset-0 overflow-hidden`,
-    children: (0, b.useMemo)(
-      () =>
-        Array.from({ length: e }, (e, n) => ({
-          id: n,
-          left: Math.random() * 100,
-          size: 8 + Math.random() * 12,
-          delay: t ? Math.random() * 0.4 : Math.random() * 12,
-          duration: (t ? 3.2 : 11) + Math.random() * 6,
-          drift: (Math.random() - 0.5) * 140,
-          spin: 180 + Math.random() * 540,
-          hue:
-            Math.random() > 0.5
-              ? `oklch(0.78 0.115 85)`
-              : `oklch(0.62 0.13 18)`,
-          opacity: 0.35 + Math.random() * 0.45,
-        })),
-      [e, t],
-    ).map((e) =>
-      (0, O.jsx)(
-        Q.span,
+      ref,
+    ) =>
+      React.createElement(
+        "svg",
         {
-          className: `absolute top-[-8%]`,
-          style: {
-            left: `${e.left}%`,
-            width: e.size,
-            height: e.size * 0.62,
-            borderRadius: `60% 10% 60% 10%`,
-            background: e.hue,
-            opacity: e.opacity,
-          },
-          initial: { y: `-10vh`, x: 0, rotate: 0 },
-          animate: { y: `115vh`, x: e.drift, rotate: e.spin },
-          transition: {
-            duration: e.duration,
-            delay: e.delay,
-            repeat: t ? 0 : 1 / 0,
-            ease: `linear`,
-          },
+          ref,
+          ...svgBase,
+          width: size,
+          height: size,
+          stroke: color,
+          strokeWidth: absoluteStrokeWidth ? (Number(strokeWidth) * 24) / Number(size) : strokeWidth,
+          className: cx("lucide", `lucide-${kebabCase(pascalCase(name))}`, `lucide-${name}`, className),
+          ...(!children && !hasAria(rest) && { "aria-hidden": "true" }),
+          ...rest,
         },
-        e.id,
+        [
+          ...iconNode.map(([tag, attrs]) => React.createElement(tag, attrs)),
+          ...(Array.isArray(children) ? children : [children]),
+        ],
       ),
-    ),
-  });
+  );
+  Component.displayName = pascalCase(name);
+  return Component;
+};
+
+const IconCalendarPlus = createIcon("calendar-plus", [
+  ["path", { d: "M16 19h6", key: "xwg31i" }],
+  ["path", { d: "M16 2v4", key: "4m81vk" }],
+  ["path", { d: "M19 16v6", key: "tddt3s" }],
+  [
+    "path",
+    {
+      d: "M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5",
+      key: "1glfrc",
+    },
+  ],
+  ["path", { d: "M3 10h18", key: "8toen8" }],
+  ["path", { d: "M8 2v4", key: "1cmpym" }],
+]);
+
+const IconChevronDown = createIcon("chevron-down", [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]]);
+
+const IconClock = createIcon("clock", [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
+]);
+
+const IconHeart = createIcon("heart", [
+  [
+    "path",
+    {
+      d: "M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5",
+      key: "mvr1a0",
+    },
+  ],
+]);
+
+const IconMapPin = createIcon("map-pin", [
+  [
+    "path",
+    {
+      d: "M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0",
+      key: "1r0f0z",
+    },
+  ],
+  ["circle", { cx: "12", cy: "10", r: "3", key: "ilqhr7" }],
+]);
+
+const IconNavigation = createIcon("navigation", [
+  ["polygon", { points: "3 11 22 2 13 21 11 13 3 11", key: "1ltx0t" }],
+]);
+
+const IconSparkles = createIcon("sparkles", [
+  [
+    "path",
+    {
+      d: "M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z",
+      key: "1s2grr",
+    },
+  ],
+  ["path", { d: "M20 2v4", key: "1rf3ol" }],
+  ["path", { d: "M22 4h-4", key: "gwowj6" }],
+  ["circle", { cx: "4", cy: "20", r: "2", key: "6kqj1y" }],
+]);
+
+const IconPhone = createIcon("phone", [
+  [
+    "path",
+    {
+      d: "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z",
+      key: "18ioyo",
+    },
+  ],
+]);
+
+const IconMusic = createIcon("music", [
+  ["path", { d: "M9 18V5l12-2v13", key: "148f3p" }],
+  ["circle", { cx: "6", cy: "18", r: "3", key: "fq0q9" }],
+  ["circle", { cx: "18", cy: "16", r: "3", key: "1n0dcf" }],
+]);
+
+const IconSun = createIcon("sun", [
+  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
+  ["path", { d: "M12 2v2", key: "197v0" }],
+  ["path", { d: "M12 20v2", key: "11y6e1" }],
+  ["path", { d: "m4.93 4.93 1.41 1.41", key: "1e1y1v" }],
+  ["path", { d: "m17.66 17.66 1.41 1.41", key: "1t0lcf" }],
+  ["path", { d: "M2 12h2", key: "1t1e6d" }],
+  ["path", { d: "M20 12h2", key: "1bpw96" }],
+  ["path", { d: "m6.34 17.66-1.41 1.41", key: "1d5e3s" }],
+  ["path", { d: "m19.07 4.93-1.41 1.41", key: "19h7v4" }],
+]);
+
+const IconShirt = createIcon("shirt", [
+  [
+    "path",
+    {
+      d: "M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z",
+      key: "3v8t0w",
+    },
+  ],
+]);
+
+function AuroraBackground({ className = "", intensity = 1 }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      style={{ opacity: intensity }}
+    >
+      <div
+        className="absolute -top-1/3 left-[-20%] h-[80%] w-[90%] rounded-full blur-3xl"
+        style={{
+          background: "radial-gradient(circle at 50% 50%, oklch(0.55 0.13 160 / 0.55), transparent 65%)",
+          animation: "aurora-drift 18s ease-in-out infinite",
+        }}
+      />
+      <div
+        className="absolute top-[10%] right-[-25%] h-[75%] w-[85%] rounded-full blur-3xl"
+        style={{
+          background: "radial-gradient(circle at 50% 50%, oklch(0.8 0.12 85 / 0.5), transparent 65%)",
+          animation: "aurora-drift 24s ease-in-out infinite reverse",
+        }}
+      />
+      <div
+        className="absolute bottom-[-25%] left-[10%] h-[70%] w-[80%] rounded-full blur-3xl"
+        style={{
+          background: "radial-gradient(circle at 50% 50%, oklch(0.52 0.16 18 / 0.4), transparent 65%)",
+          animation: "aurora-drift 30s ease-in-out infinite",
+        }}
+      />
+      <div
+        className="absolute inset-0 mix-blend-soft-light"
+        style={{
+          backgroundImage: "radial-gradient(oklch(0.98 0.02 92 / 0.35) 1px, transparent 1px)",
+          backgroundSize: "22px 22px",
+        }}
+      />
+    </div>
+  );
 }
-var $ = {
+
+function FloatingPetals({ count = 14, burst = false }) {
+  const petals = React.useMemo(
+    () =>
+      Array.from({ length: count }, (_, n) => ({
+        id: n,
+        left: Math.random() * 100,
+        size: 8 + Math.random() * 12,
+        delay: burst ? Math.random() * 0.4 : Math.random() * 12,
+        duration: (burst ? 3.2 : 11) + Math.random() * 6,
+        drift: (Math.random() - 0.5) * 140,
+        spin: 180 + Math.random() * 540,
+        hue: Math.random() > 0.5 ? "oklch(0.78 0.115 85)" : "oklch(0.62 0.13 18)",
+        opacity: 0.35 + Math.random() * 0.45,
+      })),
+    [count, burst],
+  );
+
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+      {petals.map((petal) => (
+        <motion.span
+          key={petal.id}
+          className="absolute top-[-8%]"
+          style={{
+            left: `${petal.left}%`,
+            width: petal.size,
+            height: petal.size * 0.62,
+            borderRadius: "60% 10% 60% 10%",
+            background: petal.hue,
+            opacity: petal.opacity,
+          }}
+          initial={{ y: "-10vh", x: 0, rotate: 0 }}
+          animate={{ y: "115vh", x: petal.drift, rotate: petal.spin }}
+          transition={{
+            duration: petal.duration,
+            delay: petal.delay,
+            repeat: burst ? 0 : Infinity,
+            ease: "linear",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+const WEDDING_DATA = {
   groom: {
-    name: `Aarav`,
-    fullName: `Aarav Menon`,
-    line: `Son of Mr. Ramesh & Mrs. Latha Menon`,
-    note: `An architect who sketches temples on café napkins and believes every good story starts with chai.`,
-    image: `/images/groom.png`,
+    name: "Aniket",
+    fullName: "Aniket Deepak Vaidi",
+    parents: {
+      father: "Deepak Hiranna Vaidi",
+      mother: "Vijayashree Deepak Vaidi",
+    },
+    line: "Son of Mr. Deepak Hiranna Vaidi & Mrs. Vijayashree Deepak Vaidi",
+    image: "/images/groom.png",
   },
   bride: {
-    name: `Diya`,
-    fullName: `Diya Nair`,
-    line: `Daughter of Mr. Suresh & Mrs. Anjali Nair`,
-    note: `A Bharatanatyam dancer and pediatrician who hums old Malayalam songs while she works.`,
-    image: `/images/bride.png`,
+    name: "Priyanka",
+    fullName: "Priyanka Prakash Kadam",
+    parents: {
+      father: "Prakash Baburao Kadam",
+      mother: "Asha Prakash Kadam",
+    },
+    line: "Daughter of Mr. Prakash Baburao Kadam & Mrs. Asha Prakash Kadam",
+    image: "/images/bride.png",
   },
-  dateISO: `2026-12-10T18:30:00+05:30`,
-  endISO: `2026-12-10T22:00:00+05:30`,
-  dateLabel: `Thursday, 10 December 2026`,
-  timeLabel: `6:30 PM onwards`,
-  muhurthamLabel: `Muhurtham · 7:15 PM`,
+  dateISO: "2026-12-05T08:56:00+05:30",
+  endISO: "2026-12-05T14:00:00+05:30",
+  dateLabel: "Saturday, 5 December 2026",
+  timeLabel: "8:56 AM onwards",
+  muhurthamLabel: "Muhurtham · 8:56 AM",
   venue: {
-    name: `Taj Malabar Resort & Spa`,
-    address: `Willingdon Island, Kochi, Kerala 682009`,
-    mapUrl: `https://www.google.com/maps/search/?api=1&query=Taj+Malabar+Resort+%26+Spa+Willingdon+Island+Kochi`,
+    name: "Sea Royal Cafe",
+    address: "Sea Royal Cafe, Navapur Beach, Virar West, 401303",
+    mapUrl:
+      "https://maps.google.com/maps/place//data=!4m2!3m1!1s0x3be7ab692bc5e96b:0x4c3263e61434233d?entry=s&sa=X&ved=2ahUKEwjroczKyYyYAxUO1zgGHYs6JG4Q4kB6BAgeEAA&hl=en",
   },
+  functions: [
+    {
+      id: "haldi",
+      name: "Haldi Ceremony",
+      icon: IconSun,
+      date: "3rd Dec 2026",
+      day: "Thursday",
+      time: "7:00 PM",
+      venue: "C-703, Rashmi Lakeview, Achole Road, Nallasopara East",
+      dressTheme: {
+        couple: "Yellow / White + Florals",
+        guests: "White & Pastels",
+      },
+    },
+    {
+      id: "sangeet",
+      name: "Sangeet Ceremony",
+      icon: IconMusic,
+      date: "4th Dec 2026",
+      day: "Friday",
+      time: "7:00 PM",
+      venue: "Sea Royal Cafe, Navapur Beach, Virar West",
+      dressTheme: {
+        couple: "Glamorous coordinated outfits",
+        guests: "Jewel Tones, Black, Metallics & Festive Indian Wear",
+      },
+    },
+    {
+      id: "wedding",
+      name: "Wedding Ceremony",
+      icon: IconHeart,
+      date: "5th Dec 2026",
+      day: "Saturday",
+      time: "8:56 AM (Muhurtham)",
+      venue: "Sea Royal Cafe, Navapur Beach, Virar West 401303",
+      mapUrl:
+        "https://maps.google.com/maps/place//data=!4m2!3m1!1s0x3be7ab692bc5e96b:0x4c3263e61434233d?entry=s&sa=X&ved=2ahUKEwjroczKyYyYAxUO1zgGHYs6JG4Q4kB6BAgeEAA&hl=en",
+      highlight: true,
+    },
+    {
+      id: "reception",
+      name: "Reception Ceremony",
+      icon: IconSparkles,
+      date: "5th Dec 2026",
+      day: "Saturday",
+      time: "6:30 PM",
+      venue: "Sea Royal Cafe, Navapur Beach, Virar West",
+      mapUrl:
+        "https://maps.google.com/maps/place//data=!4m2!3m1!1s0x3be7ab692bc5e96b:0x4c3263e61434233d?entry=s&sa=X&ved=2ahUKEwjroczKyYyYAxUO1zgGHYs6JG4Q4kB6BAgeEAA&hl=en",
+    },
+  ],
+  contacts: ["8806901483", "9028234119"],
 };
-function t_() {
-  let e = (0, b.useRef)(null),
-    { scrollYProgress: t } = kg({
-      target: e,
-      offset: [`start start`, `end start`],
-    }),
-    n = Lg(t, { stiffness: 100, damping: 24, mass: 0.4 }),
-    r = Ng(n, [0, 1], [`0%`, `22%`]),
-    i = Ng(n, [0, 1], [`0%`, `38%`]),
-    a = Ng(n, [0, 1], [`0%`, `80%`]),
-    o = Ng(n, [0, 0.55], [1, 0]),
-    s = Ng(n, [0, 1], [`0%`, `-18%`]),
-    c = Ng(n, [0, 1], [1, 1.12]);
-  return (0, O.jsxs)(`section`, {
-    ref: e,
-    className: `bg-emerald-deep relative flex h-[100svh] min-h-[640px] w-full flex-col items-center overflow-hidden`,
-    children: [
-      (0, O.jsx)($g, { intensity: 1 }),
-      (0, O.jsx)(`div`, {
-        className: `from-emerald-ink/50 via-emerald-deep/20 to-emerald-ink/90 absolute inset-0 bg-gradient-to-b`,
-      }),
-      (0, O.jsx)(Q.div, {
-        "aria-hidden": !0,
-        style: {
-          y: r,
-          background: `radial-gradient(ellipse at 50% 80%, oklch(0.93 0.05 92 / 0.55), transparent 62%)`,
-        },
-        className: `absolute bottom-0 left-1/2 h-[62%] w-[130%] -translate-x-1/2 rounded-t-full blur-2xl`,
-      }),
-      (0, O.jsx)(e_, { count: 12 }),
-      (0, O.jsx)(Q.img, {
-        src: `/images/garland.png`,
-        alt: ``,
-        "aria-hidden": !0,
-        style: { y: i },
-        className: `pointer-events-none absolute -top-2 left-1/2 w-[135%] max-w-none -translate-x-1/2 opacity-90`,
-      }),
-      (0, O.jsxs)(`div`, {
-        className: `relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col items-center px-6 pt-32 text-center`,
-        children: [
-          (0, O.jsxs)(Q.div, {
-            style: { y: a, opacity: o },
-            className: `flex flex-col items-center`,
-            children: [
-              (0, O.jsx)(Q.p, {
-                initial: { opacity: 0, y: 14 },
-                animate: { opacity: 1, y: 0 },
-                transition: { delay: 0.2, duration: 0.9 },
-                className: `text-gold-soft/90 text-[0.6rem] tracking-[0.5em] uppercase`,
-                children: `Together with their families`,
-              }),
-              (0, O.jsxs)(Q.h1, {
-                initial: { opacity: 0, y: 24, filter: `blur(8px)` },
-                animate: { opacity: 1, y: 0, filter: `blur(0px)` },
-                transition: {
-                  delay: 0.4,
-                  duration: 1.1,
-                  ease: [0.22, 1, 0.36, 1],
-                },
-                className: `mt-5 flex flex-col items-center leading-[0.82]`,
-                children: [
-                  (0, O.jsx)(`span`, {
-                    className: `text-gold-foil font-display text-[4.25rem] font-light`,
-                    children: $.groom.name,
-                  }),
-                  (0, O.jsx)(`span`, {
-                    className: `font-script text-gold/80 my-1 text-3xl`,
-                    children: `and`,
-                  }),
-                  (0, O.jsx)(`span`, {
-                    className: `text-gold-foil font-display text-[4.25rem] font-light`,
-                    children: $.bride.name,
-                  }),
-                ],
-              }),
-              (0, O.jsx)(Q.div, {
-                initial: { opacity: 0, scaleX: 0 },
-                animate: { opacity: 1, scaleX: 1 },
-                transition: { delay: 1, duration: 0.9 },
-                className: `rule-gold mt-7 w-40`,
-              }),
-              (0, O.jsx)(Q.p, {
-                initial: { opacity: 0, y: 14 },
-                animate: { opacity: 1, y: 0 },
-                transition: { delay: 1.15, duration: 0.9 },
-                className: `text-ivory/85 mt-5 text-sm tracking-[0.35em] uppercase`,
-                children: `10 · 12 · 2026`,
-              }),
-              (0, O.jsx)(Q.p, {
-                initial: { opacity: 0 },
-                animate: { opacity: 1 },
-                transition: { delay: 1.35, duration: 0.9 },
-                className: `text-ivory/60 mt-2 text-[0.7rem] tracking-[0.25em] uppercase`,
-                children: `Kochi, Kerala`,
-              }),
-            ],
-          }),
-          (0, O.jsx)(Q.img, {
-            src: `/images/couple-hero.png`,
-            alt: `Watercolour illustration of the couple`,
-            width: 1024,
-            height: 1408,
-            initial: { opacity: 0, y: 40, scale: 0.96 },
-            animate: { opacity: 1, y: 0, scale: 1 },
-            transition: { delay: 0.7, duration: 1.3, ease: [0.22, 1, 0.36, 1] },
-            style: { y: s, scale: c },
-            className: `mt-auto w-[88%] max-w-[350px] brightness-110 contrast-105 drop-shadow-[0_24px_40px_rgba(0,0,0,0.35)]`,
-          }),
-        ],
-      }),
-      (0, O.jsxs)(Q.div, {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        transition: { delay: 1.8 },
-        style: { opacity: o },
-        className: `text-gold/70 absolute bottom-4 z-20 flex flex-col items-center`,
-        children: [
-          (0, O.jsx)(`span`, {
-            className: `text-[0.55rem] tracking-[0.4em] uppercase`,
-            children: `Scroll`,
-          }),
-          (0, O.jsx)(Q.span, {
-            animate: { y: [0, 6, 0] },
-            transition: { repeat: 1 / 0, duration: 2 },
-            children: (0, O.jsx)(qg, { className: `h-4 w-4` }),
-          }),
-        ],
-      }),
-    ],
+
+function HeroSection() {
+  const containerRef = React.useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
   });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 24, mass: 0.4 });
+  const bgShift = useTransform(smoothProgress, [0, 1], ["0%", "22%"]);
+  const garlandShift = useTransform(smoothProgress, [0, 1], ["0%", "38%"]);
+  const textShift = useTransform(smoothProgress, [0, 1], ["0%", "50%"]);
+  const textOpacity = useTransform(smoothProgress, [0, 0.75], [1, 0]);
+
+  return (
+    <section
+      ref={containerRef}
+      className="bg-emerald-deep relative flex h-[100svh] min-h-[640px] w-full flex-col items-center justify-center overflow-hidden"
+    >
+      <AuroraBackground intensity={1} />
+      <div className="from-emerald-ink/50 via-emerald-deep/20 to-emerald-ink/90 absolute inset-0 bg-gradient-to-b" />
+      <motion.div
+        aria-hidden="true"
+        style={{
+          y: bgShift,
+          background: "radial-gradient(ellipse at 50% 50%, oklch(0.93 0.05 92 / 0.45), transparent 65%)",
+        }}
+        className="absolute inset-0 m-auto h-[70%] w-[120%] rounded-full blur-3xl"
+      />
+      <FloatingPetals count={14} />
+      <motion.img
+        src="/images/garland.png"
+        alt=""
+        aria-hidden="true"
+        style={{ y: garlandShift }}
+        className="pointer-events-none absolute -top-2 left-1/2 w-[135%] max-w-none -translate-x-1/2 opacity-90"
+      />
+      <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center px-6 pt-10 pb-16 text-center my-auto">
+        <motion.div style={{ y: textShift, opacity: textOpacity }} className="flex flex-col items-center justify-center w-full">
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.9 }}
+            className="text-gold-soft/90 text-xs tracking-[0.45em] uppercase font-light mb-16 sm:mb-20 -mt-6 sm:-mt-8"
+          >
+            Together with their families
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{
+              delay: 0.4,
+              duration: 1.1,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="mb-6 flex flex-col items-center"
+          >
+            <span
+              className="text-gold-foil font-display font-light tracking-wide text-center"
+              style={{ fontSize: "clamp(3.6rem, 14vw, 5.5rem)", lineHeight: 1.05 }}
+            >
+              {WEDDING_DATA.groom.name}
+            </span>
+            <span
+              className="font-script text-gold/85 my-1"
+              style={{ fontSize: "clamp(1.5rem, 5vw, 2.2rem)" }}
+            >
+              and
+            </span>
+            <span
+              className="text-gold-foil font-display font-light tracking-wide text-center"
+              style={{ fontSize: "clamp(3.6rem, 14vw, 5.5rem)", lineHeight: 1.05 }}
+            >
+              {WEDDING_DATA.bride.name}
+            </span>
+          </motion.h1>
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ delay: 1, duration: 0.9 }}
+            className="rule-gold mt-8 w-44"
+          />
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.15, duration: 0.9 }}
+            className="text-ivory mt-6 text-base tracking-[0.4em] uppercase font-medium"
+          >
+            05 · 12 · 2026
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.35, duration: 0.9 }}
+            className="text-ivory/70 mt-2 text-xs tracking-[0.28em] uppercase"
+          >
+            Saturday · Sea Royal Cafe, Virar
+          </motion.p>
+        </motion.div>
+      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.8 }}
+        style={{ opacity: textOpacity }}
+        className="text-gold/70 absolute bottom-4 z-20 flex flex-col items-center"
+      >
+        <span className="text-[0.55rem] tracking-[0.4em] uppercase">Scroll</span>
+        <motion.span
+          animate={{ y: [0, 6, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        >
+          <IconChevronDown className="h-4 w-4" />
+        </motion.span>
+      </motion.div>
+    </section>
+  );
 }
-function n_({ children: e, speed: t = 40, scaleRange: n, className: r = `` }) {
-  let i = (0, b.useRef)(null),
-    { scrollYProgress: a } = kg({
-      target: i,
-      offset: [`start end`, `end start`],
-    }),
-    o = Lg(a, { stiffness: 90, damping: 22, mass: 0.4 }),
-    s = Ng(o, [0, 1], [t, -t]),
-    c = Ng(o, [0, 0.5, 1], [n?.[0] ?? 1, n?.[1] ?? 1, n?.[0] ?? 1]);
-  return (0, O.jsx)(`div`, {
-    ref: i,
-    className: r,
-    children: (0, O.jsx)(Q.div, { style: { y: s, scale: c }, children: e }),
+
+function ParallaxWrap({ children, speed = 40, scaleRange, className = "" }) {
+  const ref = React.useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
   });
+  const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: 0.4 });
+  const yVal = useTransform(smooth, [0, 1], [speed, -speed]);
+  const scaleVal = useTransform(smooth, [0, 0.5, 1], [scaleRange?.[0] ?? 1, scaleRange?.[1] ?? 1, scaleRange?.[0] ?? 1]);
+
+  return (
+    <div ref={ref} className={className}>
+      <motion.div style={{ y: yVal, scale: scaleVal }}>{children}</motion.div>
+    </div>
+  );
 }
-var r_ = {
-  hidden: { opacity: 0, y: 20 },
+
+const revealVariants = {
+  hidden: { opacity: 0, y: 35, scale: 0.97 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
+    scale: 1,
+    transition: {
+      duration: 0.85,
+      ease: [0.22, 1, 0.36, 1],
+    },
   },
 };
-function i_({ children: e, delay: t = 0, className: n = `` }) {
-  return (0, O.jsx)(Q.div, {
-    className: n,
-    variants: r_,
-    initial: `hidden`,
-    whileInView: `show`,
-    viewport: { once: !0, amount: 0.25 },
-    transition: { delay: t },
-    children: e,
-  });
+
+function FadeIn({ children, delay = 0, className = "" }) {
+  return (
+    <motion.div
+      className={className}
+      variants={revealVariants}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.15, margin: "0px 0px -60px 0px" }}
+      transition={{ delay }}
+    >
+      {children}
+    </motion.div>
+  );
 }
-function a_({ label: e }) {
-  return (0, O.jsxs)(`div`, {
-    className: `flex items-center justify-center gap-3`,
-    children: [
-      (0, O.jsx)(`span`, { className: `rule-gold w-16` }),
-      e
-        ? (0, O.jsx)(`span`, {
-            className: `font-sans text-[0.65rem] tracking-[0.42em] text-gold uppercase`,
-            children: e,
-          })
-        : (0, O.jsx)(`span`, { className: `text-gold text-sm`, children: `✦` }),
-      (0, O.jsx)(`span`, { className: `rule-gold w-16` }),
-    ],
-  });
+
+function SectionDivider({ label }) {
+  return (
+    <div className="flex items-center justify-center gap-3">
+      <span className="rule-gold w-16" />
+      {label ? (
+        <span className="font-sans text-[0.65rem] tracking-[0.42em] text-gold uppercase font-medium">
+          {label}
+        </span>
+      ) : (
+        <span className="text-gold text-sm">✦</span>
+      )}
+      <span className="rule-gold w-16" />
+    </div>
+  );
 }
-function o_({ person: e, role: t, flip: n }) {
-  return (0, O.jsx)(i_, {
-    className: `relative`,
-    children: (0, O.jsxs)(`div`, {
-      className: `bg-card/70 border-gold/30 shadow-luxe relative overflow-hidden rounded-[2rem] border p-6 backdrop-blur-sm`,
-      children: [
-        (0, O.jsx)(`div`, {
-          className: `pointer-events-none absolute inset-0 opacity-[0.07]`,
-          style: {
-            backgroundImage: `url('/images/mandala-texture.jpg')`,
-            backgroundSize: `cover`,
-          },
-        }),
-        (0, O.jsxs)(`div`, {
-          className: `relative flex flex-col items-center text-center`,
-          children: [
-            (0, O.jsx)(`div`, {
-              className: `from-gold/25 relative h-40 w-40 overflow-hidden rounded-full bg-gradient-to-b to-transparent`,
-              children: (0, O.jsx)(`img`, {
-                src: e.image,
-                alt: e.fullName,
-                loading: `lazy`,
-                width: 768,
-                height: 896,
-                className: `h-full w-full object-cover object-top ${n ? `scale-x-[-1]` : ``}`,
-              }),
-            }),
-            (0, O.jsx)(`span`, {
-              className: `text-gold mt-5 text-[0.6rem] tracking-[0.45em] uppercase`,
-              children: t,
-            }),
-            (0, O.jsx)(`h3`, {
-              className: `text-primary mt-2 text-3xl font-light`,
-              children: e.fullName,
-            }),
-            (0, O.jsx)(`p`, {
-              className: `text-muted-foreground mt-1 text-xs tracking-wide`,
-              children: e.line,
-            }),
-            (0, O.jsx)(`span`, { className: `rule-gold my-4 w-20` }),
-            (0, O.jsx)(`p`, {
-              className: `text-foreground/75 text-sm leading-relaxed`,
-              children: e.note,
-            }),
-          ],
-        }),
-      ],
-    }),
-  });
+
+function PersonCard({ person, role }) {
+  return (
+    <FadeIn className="relative">
+      <div className="bg-[#FAF7F0] border border-gold/45 shadow-luxe relative overflow-hidden rounded-[2.25rem] px-6 sm:px-8 py-10 min-h-[250px] flex flex-col justify-center">
+        {/* Subtle decorative inner border */}
+        <div className="pointer-events-none absolute inset-2.5 rounded-[1.75rem] border border-gold/20" />
+        
+        <div className="relative z-10 flex flex-col items-center text-center w-full">
+          {/* Role header with gold wings */}
+          <div className="inline-flex items-center justify-center gap-2.5">
+            <span className="rule-gold w-8 opacity-70" />
+            <span className="text-gold text-[0.72rem] tracking-[0.45em] uppercase font-semibold">
+              {role}
+            </span>
+            <span className="rule-gold w-8 opacity-70" />
+          </div>
+
+          {/* Full Name */}
+          <h3 className="text-primary font-display mt-4 text-3xl sm:text-[2.6rem] font-normal leading-tight tracking-wide">
+            {person.fullName}
+          </h3>
+
+          {/* Ornate Divider */}
+          <div className="my-5 flex items-center justify-center gap-2.5 w-full">
+            <span className="rule-gold w-20 opacity-80" />
+            <span className="text-gold text-sm leading-none">✦</span>
+            <span className="rule-gold w-20 opacity-80" />
+          </div>
+
+          {/* Parents info box with clean 2-column key/value alignment */}
+          <div className="w-full max-w-[340px] bg-secondary/60 border border-gold/25 rounded-2xl py-4 px-5 shadow-xs">
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-center gap-2 text-left">
+                <span className="text-muted-foreground uppercase tracking-wider text-[0.68rem] font-bold shrink-0 min-w-[55px] text-right">
+                  Father:
+                </span>
+                <span className="text-foreground font-semibold text-sm">
+                  {person.parents.father}
+                </span>
+              </div>
+              <div className="flex items-center justify-center gap-2 text-left">
+                <span className="text-muted-foreground uppercase tracking-wider text-[0.68rem] font-bold shrink-0 min-w-[55px] text-right">
+                  Mother:
+                </span>
+                <span className="text-foreground font-semibold text-sm">
+                  {person.parents.mother}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </FadeIn>
+  );
 }
-function s_() {
-  return (0, O.jsxs)(`section`, {
-    className: `relative overflow-hidden px-5 py-20`,
-    children: [
-      (0, O.jsx)(`img`, {
-        src: `/images/floral-corner.png`,
-        alt: ``,
-        "aria-hidden": !0,
-        loading: `lazy`,
-        className: `pointer-events-none absolute -top-6 -left-10 w-44 opacity-40`,
-      }),
-      (0, O.jsx)(`img`, {
-        src: `/images/floral-corner.png`,
-        alt: ``,
-        "aria-hidden": !0,
-        loading: `lazy`,
-        className: `pointer-events-none absolute -right-10 -bottom-6 w-44 rotate-180 opacity-40`,
-      }),
-      (0, O.jsxs)(`div`, {
-        className: `relative mx-auto max-w-md`,
-        children: [
-          (0, O.jsxs)(i_, {
-            className: `text-center`,
-            children: [
-              (0, O.jsx)(a_, { label: `The Couple` }),
-              (0, O.jsx)(`h2`, {
-                className: `text-primary mt-5 text-4xl font-light`,
-                children: `Two hearts, one thread`,
-              }),
-              (0, O.jsx)(`p`, {
-                className: `text-muted-foreground mx-auto mt-3 max-w-xs text-sm leading-relaxed`,
-                children: `Seven vows, seven steps, and a lifetime of ordinary mornings made beautiful.`,
-              }),
-            ],
-          }),
-          (0, O.jsxs)(`div`, {
-            className: `mt-10 space-y-8`,
-            children: [
-              (0, O.jsx)(n_, {
-                speed: 26,
-                children: (0, O.jsx)(o_, {
-                  person: $.groom,
-                  role: `The Groom`,
-                }),
-              }),
-              (0, O.jsx)(`div`, {
-                className: `flex justify-center`,
-                children: (0, O.jsx)(`span`, {
-                  className: `font-script text-gold animate-float-soft text-5xl`,
-                  children: `&`,
-                }),
-              }),
-              (0, O.jsx)(n_, {
-                speed: -26,
-                children: (0, O.jsx)(o_, {
-                  person: $.bride,
-                  role: `The Bride`,
-                  flip: !0,
-                }),
-              }),
-            ],
-          }),
-        ],
-      }),
-    ],
-  });
+
+function CoupleSection() {
+  return (
+    <section className="relative overflow-hidden px-5 py-20">
+      <img
+        src="/images/floral-corner.png"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        className="pointer-events-none absolute -top-6 -left-10 w-44 opacity-40"
+      />
+      <img
+        src="/images/floral-corner.png"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        className="pointer-events-none absolute -right-10 -bottom-6 w-44 rotate-180 opacity-40"
+      />
+      <div className="relative mx-auto max-w-md">
+        <FadeIn className="text-center">
+          <SectionDivider label="The Couple" />
+          <h2 className="text-primary mt-5 text-4xl font-light">Two Hearts, One Journey</h2>
+          <p className="text-muted-foreground mx-auto mt-3 max-w-xs text-sm leading-relaxed">
+            With the blessings of our beloved parents and families, we take the sacred vows of love, trust, and companionship.
+          </p>
+        </FadeIn>
+        <div className="mt-10 space-y-8">
+          <ParallaxWrap speed={26}>
+            <PersonCard person={WEDDING_DATA.groom} role="The Groom" />
+          </ParallaxWrap>
+          <div className="flex justify-center">
+            <span className="font-script text-gold animate-float-soft text-5xl">&</span>
+          </div>
+          <ParallaxWrap speed={-26}>
+            <PersonCard person={WEDDING_DATA.bride} role="The Bride" flip />
+          </ParallaxWrap>
+        </div>
+      </div>
+    </section>
+  );
 }
-var c_ = new Date($.dateISO).getTime();
-function l_() {
-  let e = Math.max(0, c_ - Date.now());
+
+const weddingTimestamp = new Date(WEDDING_DATA.dateISO).getTime();
+
+function calculateTimeLeft() {
+  const diff = Math.max(0, weddingTimestamp - Date.now());
   return {
-    days: Math.floor(e / 864e5),
-    hours: Math.floor((e / 36e5) % 24),
-    minutes: Math.floor((e / 6e4) % 60),
-    seconds: Math.floor((e / 1e3) % 60),
+    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
   };
 }
-function u_({ value: e, label: t }) {
-  let n = String(e).padStart(2, `0`);
-  return (0, O.jsxs)(`div`, {
-    className: `border-gold/25 bg-emerald-ink/40 relative flex flex-col items-center overflow-hidden rounded-2xl border px-2 py-4 backdrop-blur-sm`,
-    children: [
-      (0, O.jsx)(`div`, {
-        className: `relative h-11 w-full overflow-hidden`,
-        children: (0, O.jsx)(Wp, {
-          mode: `popLayout`,
-          initial: !1,
-          children: (0, O.jsx)(
-            Q.span,
-            {
-              initial: { y: `70%`, opacity: 0, filter: `blur(4px)` },
-              animate: { y: `0%`, opacity: 1, filter: `blur(0px)` },
-              exit: { y: `-70%`, opacity: 0, filter: `blur(4px)` },
-              transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
-              className: `text-gold-foil font-display absolute inset-0 flex items-center justify-center text-4xl font-light tabular-nums`,
-              children: n,
-            },
-            n,
-          ),
-        }),
-      }),
-      (0, O.jsx)(`span`, {
-        className: `text-ivory/55 mt-2 text-[0.55rem] tracking-[0.3em] uppercase`,
-        children: t,
-      }),
-    ],
-  });
-}
-function d_() {
-  let [e, t] = (0, b.useState)(l_);
+
+function CountdownBox({ value, label }) {
+  const formatted = String(value).padStart(2, "0");
   return (
-    (0, b.useEffect)(() => {
-      let e = setInterval(() => t(l_()), 1e3);
-      return () => clearInterval(e);
-    }, []),
-    (0, O.jsxs)(`section`, {
-      className: `bg-emerald-ink relative overflow-hidden px-5 py-20`,
-      children: [
-        (0, O.jsx)(`div`, {
-          className: `pointer-events-none absolute inset-0 opacity-20`,
-          style: {
-            backgroundImage: `url('/images/mandala-texture.jpg')`,
-            backgroundSize: `140%`,
-            backgroundPosition: `center`,
-          },
-        }),
-        (0, O.jsx)(`div`, {
-          className: `from-emerald-ink via-emerald-ink/60 to-emerald-ink absolute inset-0 bg-gradient-to-b`,
-        }),
-        (0, O.jsxs)(`div`, {
-          className: `relative mx-auto max-w-md text-center`,
-          children: [
-            (0, O.jsxs)(i_, {
-              children: [
-                (0, O.jsx)(a_, { label: `Counting down` }),
-                (0, O.jsxs)(`h2`, {
-                  className: `text-ivory mt-5 text-4xl font-light`,
-                  children: [
-                    `Until we say `,
-                    (0, O.jsx)(`span`, {
-                      className: `font-script text-gold-foil`,
-                      children: `forever`,
-                    }),
-                  ],
-                }),
-              ],
-            }),
-            (0, O.jsx)(i_, {
-              delay: 0.12,
-              children: (0, O.jsxs)(`div`, {
-                className: `mt-9 grid grid-cols-4 gap-2.5`,
-                children: [
-                  (0, O.jsx)(u_, { value: e.days, label: `Days` }),
-                  (0, O.jsx)(u_, { value: e.hours, label: `Hours` }),
-                  (0, O.jsx)(u_, { value: e.minutes, label: `Mins` }),
-                  (0, O.jsx)(u_, { value: e.seconds, label: `Secs` }),
-                ],
-              }),
-            }),
-            (0, O.jsx)(i_, {
-              delay: 0.2,
-              children: (0, O.jsx)(`p`, {
-                className: `text-ivory/55 mt-6 text-xs tracking-[0.25em] uppercase`,
-                children: $.dateLabel,
-              }),
-            }),
-          ],
-        }),
-      ],
-    })
+    <div className="border-gold/25 bg-emerald-ink/40 relative flex flex-col items-center overflow-hidden rounded-2xl border px-2 py-4 backdrop-blur-sm">
+      <div className="relative h-11 w-full overflow-hidden">
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.span
+            key={formatted}
+            initial={{ y: "70%", opacity: 0, filter: "blur(4px)" }}
+            animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
+            exit={{ y: "-70%", opacity: 0, filter: "blur(4px)" }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="text-gold-foil font-display absolute inset-0 flex items-center justify-center text-4xl font-light tabular-nums"
+          >
+            {formatted}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+      <span className="text-ivory/55 mt-2 text-[0.55rem] tracking-[0.3em] uppercase">
+        {label}
+      </span>
+    </div>
   );
 }
-function f_(e) {
-  return new Date(e).toISOString().replace(/[-:]/g, ``).split(`.`)[0] + `Z`;
+
+function CountdownSection() {
+  const [timeLeft, setTimeLeft] = React.useState(calculateTimeLeft);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <section className="bg-emerald-ink relative overflow-hidden px-5 py-20">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: "url('/images/mandala-texture.jpg')",
+          backgroundSize: "140%",
+          backgroundPosition: "center",
+        }}
+      />
+      <div className="from-emerald-ink via-emerald-ink/60 to-emerald-ink absolute inset-0 bg-gradient-to-b" />
+      <div className="relative mx-auto max-w-md text-center">
+        <FadeIn>
+          <SectionDivider label="Counting down" />
+          <h2 className="text-ivory mt-5 text-4xl font-light">
+            Until we say{" "}
+            <span className="font-script text-gold-foil">forever</span>
+          </h2>
+        </FadeIn>
+        <FadeIn delay={0.12}>
+          <div className="mt-9 grid grid-cols-4 gap-2.5">
+            <CountdownBox value={timeLeft.days} label="Days" />
+            <CountdownBox value={timeLeft.hours} label="Hours" />
+            <CountdownBox value={timeLeft.minutes} label="Mins" />
+            <CountdownBox value={timeLeft.seconds} label="Secs" />
+          </div>
+        </FadeIn>
+        <FadeIn delay={0.2}>
+          <p className="text-ivory/65 mt-6 text-xs tracking-[0.25em] uppercase font-light">
+            {WEDDING_DATA.dateLabel} · 8:56 AM
+          </p>
+        </FadeIn>
+      </div>
+    </section>
+  );
 }
-function p_() {
-  let e = [
-      `BEGIN:VCALENDAR`,
-      `VERSION:2.0`,
-      `PRODID:-//Wedding Invite//EN`,
-      `BEGIN:VEVENT`,
-      `UID:${Date.now()}@wedding`,
-      `DTSTAMP:${f_(new Date().toISOString())}`,
-      `DTSTART:${f_($.dateISO)}`,
-      `DTEND:${f_($.endISO)}`,
-      `SUMMARY:${$.groom.name} & ${$.bride.name} — Wedding`,
-      `LOCATION:${$.venue.name}, ${$.venue.address}`,
-      `DESCRIPTION:With love, we invite you to our wedding.`,
-      `END:VEVENT`,
-      `END:VCALENDAR`,
-    ].join(`\r
-`),
-    t = URL.createObjectURL(new Blob([e], { type: `text/calendar` })),
-    n = document.createElement(`a`);
-  ((n.href = t),
-    (n.download = `our-wedding.ics`),
-    n.click(),
-    URL.revokeObjectURL(t));
+
+function formatIcsDate(isoString) {
+  return new Date(isoString).toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 }
-var m_ = [
-  { icon: Qg, label: `The Ceremony`, value: $.muhurthamLabel },
-  { icon: Jg, label: `Time`, value: $.timeLabel },
-  { icon: Xg, label: `Venue`, value: $.venue.name },
+
+function downloadIcsCalendar() {
+  const icsData = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Aniket & Priyanka Wedding//EN",
+    "BEGIN:VEVENT",
+    `UID:${Date.now()}@wedding`,
+    `DTSTAMP:${formatIcsDate(new Date().toISOString())}`,
+    `DTSTART:${formatIcsDate(WEDDING_DATA.dateISO)}`,
+    `DTEND:${formatIcsDate(WEDDING_DATA.endISO)}`,
+    `SUMMARY:${WEDDING_DATA.groom.name} & ${WEDDING_DATA.bride.name} Wedding`,
+    `LOCATION:${WEDDING_DATA.venue.name}, ${WEDDING_DATA.venue.address}`,
+    `DESCRIPTION:Together with their families, Aniket & Priyanka invite you to celebrate their wedding ceremony at Sea Royal Cafe, Navapur Beach, Virar West.`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+
+  const blob = new Blob([icsData], { type: "text/calendar" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `aniket-priyanka-wedding.ics`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function triggerWeddingPopperBlast() {
+  const goldAndRoseColors = ["#E6CA65", "#D4AF37", "#FFFFFF", "#F9E8B2", "#C5A059", "#2E5A44"];
+
+  // Burst from left side
+  confetti({
+    particleCount: 50,
+    angle: 60,
+    spread: 65,
+    origin: { x: 0.15, y: 0.65 },
+    colors: goldAndRoseColors,
+    ticks: 200,
+    gravity: 1.1,
+    scalar: 1.1,
+    shapes: ["circle", "square"],
+    disableForReducedMotion: true,
+  });
+
+  // Burst from right side
+  confetti({
+    particleCount: 50,
+    angle: 120,
+    spread: 65,
+    origin: { x: 0.85, y: 0.65 },
+    colors: goldAndRoseColors,
+    ticks: 200,
+    gravity: 1.1,
+    scalar: 1.1,
+    shapes: ["circle", "square"],
+    disableForReducedMotion: true,
+  });
+
+  // Center celebratory starburst
+  confetti({
+    particleCount: 40,
+    spread: 100,
+    origin: { x: 0.5, y: 0.6 },
+    colors: ["#E6CA65", "#FFFFFF", "#E8A87C"],
+    ticks: 220,
+    gravity: 0.9,
+    scalar: 1.25,
+    disableForReducedMotion: true,
+  });
+}
+
+function FunctionsSection() {
+  const blastTriggered = React.useRef(false);
+
+  return (
+    <section className="relative px-4 sm:px-6 py-20 bg-background/50">
+      <div className="mx-auto max-w-lg">
+        <FadeIn className="text-center">
+          <SectionDivider label="Wedding Itinerary" />
+          <h2 className="text-primary mt-5 text-4xl font-light">
+            Functions & Events
+          </h2>
+          <p className="text-muted-foreground mx-auto mt-2 max-w-sm text-sm">
+            Join us in the celebrations and rituals leading to our big day.
+          </p>
+        </FadeIn>
+
+        <div className="mt-10 space-y-7">
+          {WEDDING_DATA.functions.map((fn, idx) => {
+            const Icon = fn.icon;
+            const isWedding = fn.highlight;
+            return (
+              <motion.div
+                key={fn.id}
+                variants={revealVariants}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.25, margin: "0px 0px -40px 0px" }}
+                transition={{ delay: idx * 0.08 }}
+                onViewportEnter={() => {
+                  if (isWedding && !blastTriggered.current) {
+                    blastTriggered.current = true;
+                    // Trigger festive popper blast when wedding card enters viewport
+                    triggerWeddingPopperBlast();
+                  }
+                }}
+              >
+                <div
+                  className={`bg-[#FAF7F0] shadow-luxe overflow-hidden rounded-[2rem] border transition-all duration-300 ${
+                    isWedding
+                      ? "border-gold/70 ring-2 ring-gold/40 shadow-gold"
+                      : "border-gold/35 hover:border-gold/55"
+                  }`}
+                >
+                  {/* Top Bar with Title, Date and Time Badge */}
+                  <div
+                    style={{
+                      padding: "20px 24px",
+                      borderBottom: "1px solid rgba(212, 175, 55, 0.25)",
+                      background: isWedding
+                        ? "linear-gradient(135deg, oklch(33% 0.072 158), oklch(21.5% 0.05 160))"
+                        : "rgba(235, 230, 218, 0.45)",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "14px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0 }}>
+                        <span
+                          style={{
+                            display: "grid",
+                            placeItems: "center",
+                            width: "44px",
+                            height: "44px",
+                            minWidth: "44px",
+                            borderRadius: "50%",
+                            border: isWedding ? "1px solid rgba(212, 175, 55, 0.4)" : "1px solid rgba(212, 175, 55, 0.3)",
+                            backgroundColor: isWedding ? "rgba(212, 175, 55, 0.2)" : "rgba(33, 50, 40, 0.08)",
+                            color: isWedding ? "var(--gold-soft)" : "var(--primary)",
+                          }}
+                        >
+                          <Icon className="h-5 w-5" />
+                        </span>
+                        <div style={{ minWidth: 0 }}>
+                          <h3
+                            style={{
+                              fontFamily: "Cormorant Garamond, serif",
+                              fontSize: "1.45rem",
+                              fontWeight: 500,
+                              lineHeight: 1.25,
+                              color: isWedding ? "#FAF7F0" : "var(--primary)",
+                              margin: 0,
+                            }}
+                          >
+                            {fn.name}
+                          </h3>
+                          <p
+                            style={{
+                              fontSize: "0.7rem",
+                              letterSpacing: "0.22em",
+                              textTransform: "uppercase",
+                              fontWeight: 500,
+                              color: isWedding ? "rgba(250, 247, 240, 0.8)" : "var(--muted-foreground)",
+                              marginTop: "4px",
+                              marginBottom: 0,
+                            }}
+                          >
+                            {fn.day} · {fn.date}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div style={{ flexShrink: 0 }}>
+                        <span
+                          style={{
+                            display: "inline-block",
+                            padding: "6px 14px",
+                            borderRadius: "9999px",
+                            fontSize: "0.75rem",
+                            fontWeight: 600,
+                            letterSpacing: "0.05em",
+                            whiteSpace: "nowrap",
+                            lineHeight: 1.2,
+                            backgroundColor: isWedding ? "var(--gold)" : "#FAF7F0",
+                            color: isWedding ? "var(--emerald-ink)" : "var(--primary)",
+                            border: isWedding ? "none" : "1px solid rgba(212, 175, 55, 0.35)",
+                            boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                          }}
+                        >
+                          {fn.time}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Body Content */}
+                  <div className="p-6 space-y-5">
+                    {/* Venue Card */}
+                    <div className="bg-white/80 border border-gold/20 rounded-2xl p-4 shadow-xs">
+                      <div className="flex items-start gap-3">
+                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-secondary text-gold border border-gold/25 mt-0.5">
+                          <IconMapPin className="h-4 w-4" />
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[0.65rem] font-bold tracking-[0.25em] text-gold uppercase block">
+                            Venue
+                          </span>
+                          <p className="text-foreground text-sm font-medium mt-1 leading-relaxed">
+                            {fn.venue}
+                          </p>
+                          {fn.mapUrl && (
+                            <a
+                              href={fn.mapUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1.5 text-xs text-gold hover:text-gold/80 hover:underline mt-2.5 font-semibold tracking-wide"
+                            >
+                              <IconNavigation className="h-3.5 w-3.5" /> View on Google Maps
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Dress Theme Card */}
+                    {fn.dressTheme && (
+                      <div className="bg-secondary/40 border border-gold/20 rounded-2xl p-4 shadow-xs">
+                        <div className="flex items-center gap-2.5 mb-2.5 pb-2 border-b border-gold/15">
+                          <IconShirt className="h-4 w-4 text-gold shrink-0" />
+                          <span className="text-[0.68rem] font-bold tracking-[0.25em] text-gold uppercase">
+                            Dress Code Theme
+                          </span>
+                        </div>
+                        <div className="space-y-2 text-xs pl-1">
+                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                            <span className="text-foreground font-semibold shrink-0 min-w-[105px]">
+                              Bride & Groom:
+                            </span>
+                            <span className="text-foreground/85 leading-relaxed">
+                              {fn.dressTheme.couple}
+                            </span>
+                          </div>
+                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                            <span className="text-foreground font-semibold shrink-0 min-w-[105px]">
+                              Guests:
+                            </span>
+                            <span className="text-foreground/85 leading-relaxed">
+                              {fn.dressTheme.guests}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const weddingOverviewItems = [
+  { icon: IconSparkles, label: "The Ceremony", value: WEDDING_DATA.muhurthamLabel },
+  { icon: IconClock, label: "Day & Date", value: `${WEDDING_DATA.dateLabel}` },
+  { icon: IconMapPin, label: "Venue", value: WEDDING_DATA.venue.name },
 ];
-function h_() {
-  return (0, O.jsx)(`section`, {
-    className: `relative px-5 py-20`,
-    children: (0, O.jsxs)(`div`, {
-      className: `mx-auto max-w-md`,
-      children: [
-        (0, O.jsxs)(i_, {
-          className: `text-center`,
-          children: [
-            (0, O.jsx)(a_, { label: `When & Where` }),
-            (0, O.jsx)(`h2`, {
-              className: `text-primary mt-5 text-4xl font-light`,
-              children: `The celebration`,
-            }),
-          ],
-        }),
-        (0, O.jsx)(i_, {
-          delay: 0.1,
-          children: (0, O.jsxs)(`div`, {
-            className: `border-gold/30 bg-card shadow-luxe mt-8 overflow-hidden rounded-[2rem] border`,
-            children: [
-              (0, O.jsxs)(`div`, {
-                className: `from-primary to-emerald-ink bg-gradient-to-br px-6 py-7 text-center`,
-                children: [
-                  (0, O.jsx)(`p`, {
-                    className: `text-gold/80 text-[0.6rem] tracking-[0.45em] uppercase`,
-                    children: `Save the date`,
-                  }),
-                  (0, O.jsx)(`p`, {
-                    className: `text-ivory font-display mt-2 text-5xl font-light`,
-                    children: `10`,
-                  }),
-                  (0, O.jsx)(`p`, {
-                    className: `text-ivory/85 text-sm tracking-[0.35em] uppercase`,
-                    children: `December 2026`,
-                  }),
-                ],
-              }),
-              (0, O.jsx)(`div`, {
-                className: `divide-gold/15 divide-y`,
-                children: m_.map(({ icon: e, label: t, value: n }) =>
-                  (0, O.jsxs)(
-                    `div`,
-                    {
-                      className: `flex items-center gap-4 px-6 py-4`,
-                      children: [
-                        (0, O.jsx)(`span`, {
-                          className: `bg-secondary text-primary grid h-10 w-10 shrink-0 place-items-center rounded-full`,
-                          children: (0, O.jsx)(e, { className: `h-4 w-4` }),
-                        }),
-                        (0, O.jsxs)(`div`, {
-                          className: `min-w-0`,
-                          children: [
-                            (0, O.jsx)(`p`, {
-                              className: `text-muted-foreground text-[0.6rem] tracking-[0.3em] uppercase`,
-                              children: t,
-                            }),
-                            (0, O.jsx)(`p`, {
-                              className: `text-foreground truncate text-sm`,
-                              children: n,
-                            }),
-                          ],
-                        }),
-                      ],
-                    },
-                    t,
-                  ),
-                ),
-              }),
-              (0, O.jsx)(`div`, {
-                className: `px-6 pt-2 pb-6`,
-                children: (0, O.jsxs)(Q.button, {
-                  whileTap: { scale: 0.97 },
-                  onClick: p_,
-                  className: `from-primary to-emerald-ink text-ivory shadow-gold flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r py-4 text-xs tracking-[0.3em] uppercase`,
-                  children: [
-                    (0, O.jsx)(Kg, { className: `h-4 w-4` }),
-                    `Add to calendar`,
-                  ],
-                }),
-              }),
-            ],
-          }),
-        }),
-        (0, O.jsx)(i_, {
-          delay: 0.16,
-          children: (0, O.jsxs)(`div`, {
-            className: `border-gold/30 bg-card shadow-luxe mt-6 overflow-hidden rounded-[2rem] border`,
-            children: [
-              (0, O.jsxs)(`div`, {
-                className: `relative`,
-                children: [
-                  (0, O.jsx)(`img`, {
-                    src: `/images/map-preview.jpg`,
-                    alt: `Map to ${$.venue.name}`,
-                    loading: `lazy`,
-                    width: 1024,
-                    height: 768,
-                    className: `h-48 w-full object-cover`,
-                  }),
-                  (0, O.jsx)(`div`, {
-                    className: `from-card absolute inset-0 bg-gradient-to-t via-transparent to-transparent`,
-                  }),
-                ],
-              }),
-              (0, O.jsxs)(`div`, {
-                className: `px-6 pt-2 pb-6 text-center`,
-                children: [
-                  (0, O.jsx)(`p`, {
-                    className: `text-primary text-xl`,
-                    children: $.venue.name,
-                  }),
-                  (0, O.jsx)(`p`, {
-                    className: `text-muted-foreground mt-1 text-xs`,
-                    children: $.venue.address,
-                  }),
-                  (0, O.jsxs)(Q.a, {
-                    whileTap: { scale: 0.97 },
-                    href: $.venue.mapUrl,
-                    target: `_blank`,
-                    rel: `noreferrer`,
-                    className: `border-gold/50 text-primary hover:bg-secondary mt-5 inline-flex items-center justify-center gap-2 rounded-full border px-7 py-3.5 text-xs tracking-[0.3em] uppercase transition-colors`,
-                    children: [
-                      (0, O.jsx)(Zg, { className: `h-4 w-4` }),
-                      `Get directions`,
-                    ],
-                  }),
-                ],
-              }),
-            ],
-          }),
-        }),
-      ],
-    }),
-  });
-}
-function g_() {
-  return (0, O.jsxs)(`footer`, {
-    className: `bg-emerald-ink relative overflow-hidden px-5 pt-20 pb-10`,
-    children: [
-      (0, O.jsx)(`div`, {
-        className: `pointer-events-none absolute inset-0 opacity-25`,
-        style: {
-          backgroundImage: `url('/images/mandala-texture.jpg')`,
-          backgroundSize: `120%`,
-          backgroundPosition: `top center`,
-        },
-      }),
-      (0, O.jsx)($g, { intensity: 0.5 }),
-      (0, O.jsx)(`div`, {
-        className: `from-emerald-ink/70 via-emerald-ink/85 to-emerald-ink absolute inset-0 bg-gradient-to-b`,
-      }),
-      (0, O.jsx)(`img`, {
-        src: `/images/floral-corner.png`,
-        alt: ``,
-        "aria-hidden": !0,
-        loading: `lazy`,
-        className: `pointer-events-none absolute -top-4 -left-8 w-36 opacity-30`,
-      }),
-      (0, O.jsx)(`img`, {
-        src: `/images/floral-corner.png`,
-        alt: ``,
-        "aria-hidden": !0,
-        loading: `lazy`,
-        className: `pointer-events-none absolute -top-4 -right-8 w-36 -scale-x-100 opacity-30`,
-      }),
-      (0, O.jsxs)(`div`, {
-        className: `relative mx-auto max-w-md text-center`,
-        children: [
-          (0, O.jsxs)(i_, {
-            children: [
-              (0, O.jsx)(a_, { label: `With love` }),
-              (0, O.jsx)(`p`, {
-                className: `font-script text-gold-foil mt-6 text-4xl leading-snug`,
-                children: `Come bless our beginning`,
-              }),
-              (0, O.jsx)(`p`, {
-                className: `text-ivory/70 mx-auto mt-5 max-w-sm text-sm leading-relaxed`,
-                children: `Your presence is the only gift we ask for. Bring your laughter, your appetite and your dancing shoes — we have saved a seat, and a story, for you.`,
-              }),
-            ],
-          }),
-          (0, O.jsx)(i_, {
-            delay: 0.12,
-            children: (0, O.jsxs)(`div`, {
-              className: `mt-9 flex flex-col items-center`,
-              children: [
-                (0, O.jsx)(`span`, { className: `rule-gold w-28` }),
-                (0, O.jsxs)(`p`, {
-                  className: `text-ivory font-display mt-6 text-3xl font-light`,
-                  children: [
-                    $.groom.name,
-                    ` `,
-                    (0, O.jsx)(`span`, {
-                      className: `font-script text-gold`,
-                      children: `&`,
-                    }),
-                    ` `,
-                    $.bride.name,
-                  ],
-                }),
-                (0, O.jsx)(`p`, {
-                  className: `text-ivory/50 mt-2 text-[0.6rem] tracking-[0.4em] uppercase`,
-                  children: `10 · 12 · 2026 · Kochi`,
-                }),
-              ],
-            }),
-          }),
-          (0, O.jsxs)(`p`, {
-            className: `text-ivory/35 mt-12 flex items-center justify-center gap-1.5 text-[0.6rem] tracking-[0.3em] uppercase`,
-            children: [
-              `Made with `,
-              (0, O.jsx)(Yg, { className: `text-gold h-3 w-3 fill-current` }),
-              ` for our people`,
-            ],
-          }),
-        ],
-      }),
-      (0, O.jsx)(`div`, {
-        className: `mt-3 text-[10px] uppercase tracking-[0.35em] opacity-70`,
-        children: (0, O.jsx)(Credit, {}),
-      }),
-    ],
-  });
-}
-function __({ onOpen: e }) {
-  let [t, n] = (0, b.useState)(!1);
-  return (0, O.jsxs)(Q.div, {
-    className: `fixed inset-0 z-50 flex items-center justify-center overflow-hidden`,
-    exit: { opacity: 0 },
-    transition: { duration: 0.5 },
-    children: [
-      [-1, 1].map((e) =>
-        (0, O.jsxs)(
-          Q.div,
-          {
-            className: `bg-emerald-ink absolute inset-y-0 w-[51%] overflow-hidden`,
-            style: { [e === -1 ? `left` : `right`]: 0 },
-            animate: t ? { x: `${e * 105}%` } : { x: 0 },
-            transition: { duration: 1.3, ease: [0.76, 0, 0.24, 1] },
-            children: [
-              (0, O.jsx)($g, { intensity: 0.55 }),
-              (0, O.jsx)(`div`, {
-                className: `pointer-events-none absolute inset-0 opacity-20`,
-                style: {
-                  backgroundImage: `url('/images/mandala-texture.jpg')`,
-                  backgroundSize: `cover`,
-                  backgroundPosition: e === -1 ? `right center` : `left center`,
-                },
-              }),
-              (0, O.jsx)(`div`, {
-                className: `absolute inset-y-0 w-[2px]`,
-                style: {
-                  [e === -1 ? `right` : `left`]: 0,
-                  background: `var(--gradient-gold)`,
-                },
-              }),
-            ],
-          },
-          e,
-        ),
-      ),
-      (0, O.jsx)(e_, { count: 10 }),
-      (0, O.jsx)(Wp, {
-        children:
-          !t &&
-          (0, O.jsxs)(Q.div, {
-            className: `relative z-10 flex flex-col items-center px-8 text-center`,
-            initial: { opacity: 0, y: 18 },
-            animate: { opacity: 1, y: 0 },
-            exit: { opacity: 0, scale: 0.9, filter: `blur(6px)` },
-            transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
-            children: [
-              (0, O.jsx)(`span`, {
-                className: `text-gold/80 text-[0.55rem] tracking-[0.5em] uppercase`,
-                children: `A wedding invitation`,
-              }),
-              (0, O.jsxs)(`h1`, {
-                className: `text-gold-foil font-display mt-5 text-5xl leading-none font-light`,
-                children: [
-                  $.groom.name,
-                  (0, O.jsx)(`span`, {
-                    className: `font-script text-gold/80 mx-3 text-3xl`,
-                    children: `&`,
-                  }),
-                  $.bride.name,
-                ],
-              }),
-              (0, O.jsx)(`span`, { className: `rule-gold mt-6 w-32` }),
-              (0, O.jsxs)(Q.button, {
-                onClick: () => {
-                  t || (n(!0), window.setTimeout(e, 1500));
-                },
-                whileTap: { scale: 0.92 },
-                whileHover: { scale: 1.05 },
-                className: `group relative mt-12 grid h-28 w-28 place-items-center`,
-                "aria-label": `Open the invitation`,
-                children: [
-                  (0, O.jsx)(Q.span, {
-                    className: `border-gold/40 absolute inset-0 rounded-full border`,
-                    animate: { scale: [1, 1.28, 1], opacity: [0.7, 0, 0.7] },
-                    transition: {
-                      repeat: 1 / 0,
-                      duration: 2.6,
-                      ease: `easeOut`,
-                    },
-                  }),
-                  (0, O.jsx)(Q.span, {
-                    className: `shadow-gold grid h-20 w-20 place-items-center rounded-full`,
-                    style: { backgroundImage: `var(--gradient-gold)` },
-                    animate: { y: [0, -5, 0] },
-                    transition: {
-                      repeat: 1 / 0,
-                      duration: 3.4,
-                      ease: `easeInOut`,
-                    },
-                    children: (0, O.jsxs)(`span`, {
-                      className: `font-script text-emerald-ink text-3xl leading-none`,
-                      children: [$.groom.name[0], $.bride.name[0]],
-                    }),
-                  }),
-                ],
-              }),
-              (0, O.jsx)(Q.p, {
-                className: `text-ivory/60 mt-8 text-[0.6rem] tracking-[0.4em] uppercase`,
-                animate: { opacity: [0.4, 1, 0.4] },
-                transition: { repeat: 1 / 0, duration: 2.4 },
-                children: `Tap the seal to open`,
-              }),
-            ],
-          }),
-      }),
-    ],
-  });
-}
-function v_() {
-  let { scrollYProgress: e } = kg(),
-    t = Lg(e, { stiffness: 120, damping: 26, mass: 0.3 });
-  return (0, O.jsx)(Q.div, {
-    "aria-hidden": !0,
-    className: `fixed top-0 right-0 left-0 z-40 h-[3px] origin-left`,
-    style: { scaleX: t, backgroundImage: `var(--gradient-gold)` },
-  });
-}
-function S_() {
-  let [e, t] = (0, b.useState)(!1);
+
+function CelebrationSection() {
   return (
-    (0, b.useEffect)(
-      () => (
-        (document.body.style.overflow = e ? `` : `hidden`),
-        () => {
-          document.body.style.overflow = ``;
-        }
-      ),
-      [e],
-    ),
-    (0, O.jsxs)(O.Fragment, {
-      children: [
-        (0, O.jsx)(Wp, {
-          children: !e && (0, O.jsx)(__, { onOpen: () => t(!0) }, `opener`),
-        }),
-        e && (0, O.jsx)(v_, {}),
-        (0, O.jsxs)(Q.main, {
-          initial: { opacity: 0, scale: 1.03 },
-          animate: e ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.03 },
-          transition: { duration: 1, ease: [0.22, 1, 0.36, 1] },
-          className: `bg-background mx-auto w-full max-w-[520px] overflow-hidden`,
-          children: [
-            (0, O.jsx)(t_, {}),
-            (0, O.jsx)(s_, {}),
-            (0, O.jsx)(d_, {}),
-            (0, O.jsx)(h_, {}),
-            (0, O.jsx)(g_, {}),
-          ],
-        }),
-      ],
-    })
+    <section className="relative px-5 py-20">
+      <div className="mx-auto max-w-md">
+        <FadeIn className="text-center">
+          <SectionDivider label="Main Wedding" />
+          <h2 className="text-primary mt-5 text-4xl font-light">
+            The Celebration
+          </h2>
+        </FadeIn>
+
+        <FadeIn delay={0.1}>
+          <div className="border-gold/30 bg-card shadow-luxe mt-8 overflow-hidden rounded-[2rem] border">
+            <div className="from-primary to-emerald-ink bg-gradient-to-br px-6 py-7 text-center">
+              <p className="text-gold/80 text-[0.6rem] tracking-[0.45em] uppercase">
+                Save the date
+              </p>
+              <p className="text-ivory font-display mt-2 text-5xl font-light">
+                05
+              </p>
+              <p className="text-ivory/85 text-sm tracking-[0.35em] uppercase">
+                December 2026
+              </p>
+              <p className="text-gold/90 text-xs tracking-[0.25em] uppercase mt-1 font-light">
+                Saturday · 8:56 AM
+              </p>
+            </div>
+            <div className="divide-gold/15 divide-y">
+              {weddingOverviewItems.map(({ icon: Icon, label, value }) => (
+                <div key={label} className="flex items-center gap-4 px-6 py-4">
+                  <span className="bg-secondary text-primary grid h-10 w-10 shrink-0 place-items-center rounded-full">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-muted-foreground text-[0.6rem] tracking-[0.3em] uppercase">
+                      {label}
+                    </p>
+                    <p className="text-foreground truncate text-sm font-medium">
+                      {value}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="px-6 pt-2 pb-6">
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={downloadIcsCalendar}
+                className="from-primary to-emerald-ink text-ivory shadow-gold flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r py-4 text-xs tracking-[0.3em] uppercase font-medium cursor-pointer"
+              >
+                <IconCalendarPlus className="h-4 w-4" />
+                Add to calendar
+              </motion.button>
+            </div>
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.16}>
+          <div className="border-gold/30 bg-card shadow-luxe mt-6 overflow-hidden rounded-[2rem] border">
+            <div className="relative">
+              <img
+                src="/images/map-preview.jpg"
+                alt={`Map to ${WEDDING_DATA.venue.name}`}
+                loading="lazy"
+                width={1024}
+                height={768}
+                className="h-48 w-full object-cover"
+              />
+              <div className="from-card absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
+            </div>
+            <div className="px-6 pt-2 pb-6 text-center">
+              <p className="text-primary text-xl font-medium">
+                {WEDDING_DATA.venue.name}
+              </p>
+              <p className="text-muted-foreground mt-1 text-xs leading-relaxed max-w-xs mx-auto">
+                {WEDDING_DATA.venue.address}
+              </p>
+              <motion.a
+                whileTap={{ scale: 0.97 }}
+                href={WEDDING_DATA.venue.mapUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="border-gold/50 text-primary hover:bg-secondary mt-5 inline-flex items-center justify-center gap-2 rounded-full border px-7 py-3.5 text-xs tracking-[0.3em] uppercase transition-colors"
+              >
+                <IconNavigation className="h-4 w-4" />
+                Get directions
+              </motion.a>
+            </div>
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.22}>
+          <div className="border-gold/30 bg-card/80 shadow-luxe mt-6 overflow-hidden rounded-[2rem] border p-6 text-center backdrop-blur-sm">
+            <div className="flex items-center justify-center gap-2 text-gold mb-2">
+              <IconPhone className="h-4 w-4" />
+              <span className="text-[0.65rem] tracking-[0.35em] uppercase font-semibold">
+                Contact & RSVP
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              For any assistance, travel guidance or queries, please reach out to:
+            </p>
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+              {WEDDING_DATA.contacts.map((num) => (
+                <a
+                  key={num}
+                  href={`tel:${num}`}
+                  className="bg-secondary/60 hover:bg-secondary border border-gold/30 text-foreground px-4 py-2 rounded-full text-xs font-medium tracking-wider inline-flex items-center gap-2 transition-colors"
+                >
+                  <IconPhone className="h-3 w-3 text-gold" />
+                  +91 {num}
+                </a>
+              ))}
+            </div>
+          </div>
+        </FadeIn>
+      </div>
+    </section>
   );
 }
-export default S_;
+
+function FooterSection() {
+  return (
+    <footer className="bg-emerald-ink relative overflow-hidden px-5 pt-20 pb-10">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-25"
+        style={{
+          backgroundImage: "url('/images/mandala-texture.jpg')",
+          backgroundSize: "120%",
+          backgroundPosition: "top center",
+        }}
+      />
+      <AuroraBackground intensity={0.5} />
+      <div className="from-emerald-ink/70 via-emerald-ink/85 to-emerald-ink absolute inset-0 bg-gradient-to-b" />
+      <img
+        src="/images/floral-corner.png"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        className="pointer-events-none absolute -top-4 -left-8 w-36 opacity-30"
+      />
+      <img
+        src="/images/floral-corner.png"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        className="pointer-events-none absolute -top-4 -right-8 w-36 -scale-x-100 opacity-30"
+      />
+      <div className="relative mx-auto max-w-md text-center">
+        <FadeIn>
+          <SectionDivider label="With love" />
+          <p className="font-script text-gold-foil mt-6 text-4xl leading-snug">
+            Come bless our beginning
+          </p>
+          <p className="text-ivory/70 mx-auto mt-5 max-w-sm text-sm leading-relaxed">
+            Your presence and blessings are our greatest gifts as we embark on this sacred journey of love and togetherness.
+          </p>
+        </FadeIn>
+        <FadeIn delay={0.12}>
+          <div className="mt-9 flex flex-col items-center">
+            <span className="rule-gold w-28" />
+            <p className="text-ivory font-display mt-6 text-3xl font-light">
+              {WEDDING_DATA.groom.name}{" "}
+              <span className="font-script text-gold">&</span>{" "}
+              {WEDDING_DATA.bride.name}
+            </p>
+            <p className="text-ivory/50 mt-2 text-[0.6rem] tracking-[0.4em] uppercase">
+              05 · 12 · 2026 · Virar
+            </p>
+          </div>
+        </FadeIn>
+        <p className="text-ivory/35 mt-12 flex items-center justify-center gap-1.5 text-[0.6rem] tracking-[0.3em] uppercase">
+          Made with <IconHeart className="text-gold h-3 w-3 fill-current" /> for our families & friends
+        </p>
+      </div>
+      <div className="mt-3 text-[10px] uppercase tracking-[0.35em] opacity-70">
+        <Credit />
+      </div>
+    </footer>
+  );
+}
+
+function EnvelopeOpener({ onOpen }) {
+  const [opening, setOpening] = React.useState(false);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {[-1, 1].map((direction) => (
+        <motion.div
+          key={direction}
+          className="bg-emerald-ink absolute inset-y-0 w-[51%] overflow-hidden z-10"
+          style={{ [direction === -1 ? "left" : "right"]: 0 }}
+          animate={opening ? { x: `${direction * 105}%` } : { x: 0 }}
+          transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
+        >
+          <AuroraBackground intensity={0.55} />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: "url('/images/mandala-texture.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: direction === -1 ? "right center" : "left center",
+            }}
+          />
+          <div
+            className="absolute inset-y-0 w-[2px]"
+            style={{
+              [direction === -1 ? "right" : "left"]: 0,
+              background: "var(--gradient-gold)",
+            }}
+          />
+        </motion.div>
+      ))}
+      <FloatingPetals count={10} />
+      <AnimatePresence>
+        {!opening && (
+          <motion.div
+            className="relative z-20 flex flex-col items-center px-8 text-center"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, filter: "blur(6px)" }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="text-gold/80 text-[0.55rem] tracking-[0.5em] uppercase">
+              A wedding invitation
+            </span>
+            <h1 className="text-gold-foil font-display mt-5 text-5xl leading-none font-light">
+              {WEDDING_DATA.groom.name}
+              <span className="font-script text-gold/80 mx-3 text-3xl">&</span>
+              {WEDDING_DATA.bride.name}
+            </h1>
+            <span className="rule-gold mt-6 w-32" />
+            <motion.button
+              onClick={() => {
+                if (!opening) {
+                  setOpening(true);
+                  onOpen();
+                }
+              }}
+              whileTap={{ scale: 0.92 }}
+              whileHover={{ scale: 1.05 }}
+              className="group relative mt-12 grid h-28 w-28 place-items-center cursor-pointer select-none"
+              aria-label="Open the invitation"
+            >
+              <motion.span
+                className="border-gold/40 absolute inset-0 rounded-full border pointer-events-none"
+                animate={{ scale: [1, 1.28, 1], opacity: [0.7, 0, 0.7] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 2.6,
+                  ease: "easeOut",
+                }}
+              />
+              <motion.span
+                className="shadow-gold grid h-20 w-20 place-items-center rounded-full pointer-events-none"
+                style={{ backgroundImage: "var(--gradient-gold)" }}
+                animate={{ y: [0, -5, 0] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 3.4,
+                  ease: "easeInOut",
+                }}
+              >
+                <span className="font-display font-medium text-emerald-ink text-2xl tracking-normal flex items-center justify-center">
+                  <span>{WEDDING_DATA.groom.name[0]}</span>
+                  <span className="font-script text-base mx-0.5 opacity-75">&</span>
+                  <span>{WEDDING_DATA.bride.name[0]}</span>
+                </span>
+              </motion.span>
+            </motion.button>
+            <motion.p
+              className="text-ivory/60 mt-8 text-[0.6rem] tracking-[0.4em] uppercase"
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ repeat: Infinity, duration: 2.4 }}
+            >
+              Tap the seal to open
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scale = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.3 });
+  return (
+    <motion.div
+      aria-hidden="true"
+      className="fixed top-0 right-0 left-0 z-40 h-[3px] origin-left"
+      style={{ scaleX: scale, backgroundImage: "var(--gradient-gold)" }}
+    />
+  );
+}
+
+export default function WeddingApp() {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [showOpener, setShowOpener] = React.useState(true);
+
+  React.useEffect(() => {
+    document.body.style.overflow = isOpen ? "" : "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  const handleOpen = () => {
+    setIsOpen(true);
+    // Remove opener from DOM after the sliding doors finish parting
+    window.setTimeout(() => setShowOpener(false), 1200);
+  };
+
+  return (
+    <Jsx.Fragment>
+      <AnimatePresence>
+        {showOpener && <EnvelopeOpener key="opener" onOpen={handleOpen} />}
+      </AnimatePresence>
+      {isOpen && <ScrollProgress />}
+      <main className="bg-background mx-auto w-full max-w-[520px] overflow-hidden">
+        <HeroSection />
+        <CoupleSection />
+        <CountdownSection />
+        <FunctionsSection />
+        <CelebrationSection />
+        <FooterSection />
+      </main>
+    </Jsx.Fragment>
+  );
+}
