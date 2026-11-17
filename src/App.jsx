@@ -263,16 +263,6 @@ function FloatingPetals({ count = 14, burst = false }) {
 }
 
 const WEDDING_DATA = {
-  groom: {
-    name: "Aniket",
-    fullName: "Aniket Deepak Vaidi",
-    parents: {
-      father: "Deepak Hiranna Vaidi",
-      mother: "Vijayashree Deepak Vaidi",
-    },
-    line: "Son of Mr. Deepak Hiranna Vaidi & Mrs. Vijayashree Deepak Vaidi",
-    image: "/images/groom.png",
-  },
   bride: {
     name: "Priyanka",
     fullName: "Priyanka Prakash Kadam",
@@ -282,6 +272,16 @@ const WEDDING_DATA = {
     },
     line: "Daughter of Mr. Prakash Baburao Kadam & Mrs. Asha Prakash Kadam",
     image: "/images/bride.png",
+  },
+  groom: {
+    name: "Aniket",
+    fullName: "Aniket Deepak Vaidi",
+    parents: {
+      father: "Deepak Hiranna Vaidi",
+      mother: "Vijayashree Deepak Vaidi",
+    },
+    line: "Son of Mr. Deepak Hiranna Vaidi & Mrs. Vijayashree Deepak Vaidi",
+    image: "/images/groom.png",
   },
   dateISO: "2026-12-05T08:56:00+05:30",
   endISO: "2026-12-05T14:00:00+05:30",
@@ -296,12 +296,13 @@ const WEDDING_DATA = {
   },
   functions: [
     {
-      id: "haldi",
-      name: "Haldi Ceremony",
+      id: "priyanka-haldi",
+      name: "Priyanka Haldi",
+      subtitle: "Ghar ki Haldi",
       icon: IconSun,
       date: "3rd Dec 2026",
       day: "Thursday",
-      time: "7:00 PM",
+      time: "7:00 PM onwards",
       venue: "C-703, Rashmi Lakeview, Achole Road, Nallasopara East",
       dressTheme: {
         couple: "Yellow / White + Florals",
@@ -309,12 +310,26 @@ const WEDDING_DATA = {
       },
     },
     {
+      id: "couple-haldi",
+      name: "Bride & Groom Haldi",
+      subtitle: "Phoolowali Haldi",
+      icon: IconSun,
+      date: "4th Dec 2026",
+      day: "Friday",
+      time: "12:00 PM onwards",
+      venue: "Sea Royal Cafe, Navapur Beach, Virar West",
+      dressTheme: {
+        guests: "White & Pastels",
+      },
+    },
+    {
       id: "sangeet",
       name: "Sangeet Ceremony",
+      subtitle: "Musical Night",
       icon: IconMusic,
       date: "4th Dec 2026",
       day: "Friday",
-      time: "7:00 PM",
+      time: "7:00 PM onwards",
       venue: "Sea Royal Cafe, Navapur Beach, Virar West",
       dressTheme: {
         couple: "Glamorous coordinated outfits",
@@ -324,6 +339,7 @@ const WEDDING_DATA = {
     {
       id: "wedding",
       name: "Wedding Ceremony",
+      subtitle: "The Sacred Muhurtham",
       icon: IconHeart,
       date: "5th Dec 2026",
       day: "Saturday",
@@ -336,10 +352,11 @@ const WEDDING_DATA = {
     {
       id: "reception",
       name: "Reception Ceremony",
+      subtitle: "Celebration & Blessings",
       icon: IconSparkles,
       date: "5th Dec 2026",
       day: "Saturday",
-      time: "6:30 PM",
+      time: "6:30 PM onwards",
       venue: "Sea Royal Cafe, Navapur Beach, Virar West",
       mapUrl:
         "https://maps.google.com/maps/place//data=!4m2!3m1!1s0x3be7ab692bc5e96b:0x4c3263e61434233d?entry=s&sa=X&ved=2ahUKEwjroczKyYyYAxUO1zgGHYs6JG4Q4kB6BAgeEAA&hl=en",
@@ -401,25 +418,38 @@ function HeroSection() {
               duration: 1.1,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="mb-6 flex flex-col items-center"
+            className="mt-6 mb-6 flex flex-col items-center"
           >
             <span
-              className="text-gold-foil font-display font-light tracking-wide text-center"
-              style={{ fontSize: "clamp(3.6rem, 14vw, 5.5rem)", lineHeight: 1.05 }}
+              className="text-gold-foil font-light tracking-wider text-center"
+              style={{
+                fontFamily: "'Cinzel Decorative', serif",
+                fontSize: "clamp(2.8rem, 11vw, 4.4rem)",
+                lineHeight: 1.15,
+                textShadow: "0 2px 20px rgba(212, 175, 55, 0.25)",
+              }}
             >
-              {WEDDING_DATA.groom.name}
+              {WEDDING_DATA.bride.name}
             </span>
             <span
-              className="font-script text-gold/85 my-1"
-              style={{ fontSize: "clamp(1.5rem, 5vw, 2.2rem)" }}
+              className="text-gold/85 my-1"
+              style={{
+                fontFamily: "'Alex Brush', 'Great Vibes', cursive",
+                fontSize: "clamp(2rem, 7vw, 2.8rem)",
+              }}
             >
               and
             </span>
             <span
-              className="text-gold-foil font-display font-light tracking-wide text-center"
-              style={{ fontSize: "clamp(3.6rem, 14vw, 5.5rem)", lineHeight: 1.05 }}
+              className="text-gold-foil font-light tracking-wider text-center"
+              style={{
+                fontFamily: "'Cinzel Decorative', serif",
+                fontSize: "clamp(2.8rem, 11vw, 4.4rem)",
+                lineHeight: 1.15,
+                textShadow: "0 2px 20px rgba(212, 175, 55, 0.25)",
+              }}
             >
-              {WEDDING_DATA.bride.name}
+              {WEDDING_DATA.groom.name}
             </span>
           </motion.h1>
           <motion.div
@@ -609,13 +639,13 @@ function CoupleSection() {
         </FadeIn>
         <div className="mt-10 space-y-8">
           <ParallaxWrap speed={26}>
-            <PersonCard person={WEDDING_DATA.groom} role="The Groom" />
+            <PersonCard person={WEDDING_DATA.bride} role="The Bride" />
           </ParallaxWrap>
           <div className="flex justify-center">
             <span className="font-script text-gold animate-float-soft text-5xl">&</span>
           </div>
           <ParallaxWrap speed={-26}>
-            <PersonCard person={WEDDING_DATA.bride} role="The Bride" flip />
+            <PersonCard person={WEDDING_DATA.groom} role="The Groom" />
           </ParallaxWrap>
         </div>
       </div>
@@ -795,7 +825,7 @@ function FunctionsSection() {
           </p>
         </FadeIn>
 
-        <div className="mt-10 space-y-7">
+        <div className="mt-10 space-y-16 sm:space-y-20">
           {WEDDING_DATA.functions.map((fn, idx) => {
             const Icon = fn.icon;
             const isWedding = fn.highlight;
@@ -807,6 +837,7 @@ function FunctionsSection() {
                 whileInView="show"
                 viewport={{ once: true, amount: 0.25, margin: "0px 0px -40px 0px" }}
                 transition={{ delay: idx * 0.08 }}
+                className="mb-6 sm:mb-8"
                 onViewportEnter={() => {
                   if (isWedding && !blastTriggered.current) {
                     blastTriggered.current = true;
@@ -825,47 +856,62 @@ function FunctionsSection() {
                   {/* Top Bar with Title, Date and Time Badge */}
                   <div
                     style={{
-                      padding: "20px 24px",
+                      padding: "18px 20px",
                       borderBottom: "1px solid rgba(212, 175, 55, 0.25)",
                       background: isWedding
                         ? "linear-gradient(135deg, oklch(33% 0.072 158), oklch(21.5% 0.05 160))"
                         : "rgba(235, 230, 218, 0.45)",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "14px" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "10px" }}>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", minWidth: 0, flex: 1 }}>
                         <span
                           style={{
                             display: "grid",
                             placeItems: "center",
-                            width: "44px",
-                            height: "44px",
-                            minWidth: "44px",
+                            width: "42px",
+                            height: "42px",
+                            minWidth: "42px",
                             borderRadius: "50%",
                             border: isWedding ? "1px solid rgba(212, 175, 55, 0.4)" : "1px solid rgba(212, 175, 55, 0.3)",
                             backgroundColor: isWedding ? "rgba(212, 175, 55, 0.2)" : "rgba(33, 50, 40, 0.08)",
                             color: isWedding ? "var(--gold-soft)" : "var(--primary)",
+                            marginTop: "2px",
                           }}
                         >
                           <Icon className="h-5 w-5" />
                         </span>
-                        <div style={{ minWidth: 0 }}>
+                        <div style={{ minWidth: 0, flex: 1 }}>
                           <h3
                             style={{
                               fontFamily: "Cormorant Garamond, serif",
-                              fontSize: "1.45rem",
-                              fontWeight: 500,
-                              lineHeight: 1.25,
+                              fontSize: "1.35rem",
+                              fontWeight: 600,
+                              lineHeight: 1.2,
                               color: isWedding ? "#FAF7F0" : "var(--primary)",
                               margin: 0,
                             }}
                           >
                             {fn.name}
                           </h3>
+                          {fn.subtitle && (
+                            <p
+                              style={{
+                                fontFamily: "'Alex Brush', cursive",
+                                fontSize: "1.15rem",
+                                color: isWedding ? "var(--gold-soft)" : "var(--gold)",
+                                margin: "2px 0 0 0",
+                                lineHeight: 1.1,
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              ({fn.subtitle})
+                            </p>
+                          )}
                           <p
                             style={{
-                              fontSize: "0.7rem",
-                              letterSpacing: "0.22em",
+                              fontSize: "0.68rem",
+                              letterSpacing: "0.18em",
                               textTransform: "uppercase",
                               fontWeight: 500,
                               color: isWedding ? "rgba(250, 247, 240, 0.8)" : "var(--muted-foreground)",
@@ -878,15 +924,15 @@ function FunctionsSection() {
                         </div>
                       </div>
 
-                      <div style={{ flexShrink: 0 }}>
+                      <div style={{ flexShrink: 0, marginTop: "2px" }}>
                         <span
                           style={{
                             display: "inline-block",
-                            padding: "6px 14px",
+                            padding: "5px 12px",
                             borderRadius: "9999px",
-                            fontSize: "0.75rem",
+                            fontSize: "0.72rem",
                             fontWeight: 600,
-                            letterSpacing: "0.05em",
+                            letterSpacing: "0.03em",
                             whiteSpace: "nowrap",
                             lineHeight: 1.2,
                             backgroundColor: isWedding ? "var(--gold)" : "#FAF7F0",
@@ -1137,10 +1183,10 @@ function FooterSection() {
         <FadeIn delay={0.12}>
           <div className="mt-9 flex flex-col items-center">
             <span className="rule-gold w-28" />
-            <p className="text-ivory font-display mt-6 text-3xl font-light">
-              {WEDDING_DATA.groom.name}{" "}
-              <span className="font-script text-gold">&</span>{" "}
-              {WEDDING_DATA.bride.name}
+            <p className="text-ivory mt-6 text-3xl sm:text-4xl font-light" style={{ fontFamily: "'Cinzel Decorative', serif" }}>
+              {WEDDING_DATA.bride.name}{" "}
+              <span className="text-gold" style={{ fontFamily: "'Alex Brush', cursive" }}>&</span>{" "}
+              {WEDDING_DATA.groom.name}
             </p>
             <p className="text-ivory/50 mt-2 text-[0.6rem] tracking-[0.4em] uppercase">
               05 · 12 · 2026 · Virar
@@ -1206,10 +1252,10 @@ function EnvelopeOpener({ onOpen }) {
             <span className="text-gold/80 text-[0.55rem] tracking-[0.5em] uppercase">
               A wedding invitation
             </span>
-            <h1 className="text-gold-foil font-display mt-5 text-5xl leading-none font-light">
-              {WEDDING_DATA.groom.name}
-              <span className="font-script text-gold/80 mx-3 text-3xl">&</span>
+            <h1 className="text-gold-foil mt-5 text-4xl sm:text-5xl leading-tight font-light" style={{ fontFamily: "'Cinzel Decorative', serif" }}>
               {WEDDING_DATA.bride.name}
+              <span className="text-gold/80 mx-2 text-2xl sm:text-3xl" style={{ fontFamily: "'Alex Brush', cursive" }}>&</span>
+              {WEDDING_DATA.groom.name}
             </h1>
             <span className="rule-gold mt-6 w-32" />
             <motion.button
@@ -1243,10 +1289,10 @@ function EnvelopeOpener({ onOpen }) {
                   ease: "easeInOut",
                 }}
               >
-                <span className="font-display font-medium text-emerald-ink text-2xl tracking-normal flex items-center justify-center">
-                  <span>{WEDDING_DATA.groom.name[0]}</span>
-                  <span className="font-script text-base mx-0.5 opacity-75">&</span>
+                <span className="font-medium text-emerald-ink text-2xl tracking-normal flex items-center justify-center" style={{ fontFamily: "'Cinzel Decorative', serif" }}>
                   <span>{WEDDING_DATA.bride.name[0]}</span>
+                  <span className="text-base mx-0.5 opacity-75" style={{ fontFamily: "'Alex Brush', cursive" }}>&</span>
+                  <span>{WEDDING_DATA.groom.name[0]}</span>
                 </span>
               </motion.span>
             </motion.button>
