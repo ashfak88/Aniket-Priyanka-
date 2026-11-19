@@ -297,7 +297,7 @@ const WEDDING_DATA = {
   functions: [
     {
       id: "priyanka-haldi",
-      name: "Priyanka Haldi",
+      name: "Priyanka's Haldi",
       subtitle: "Ghar ki Haldi",
       icon: IconSun,
       date: "3rd Dec 2026",
@@ -417,14 +417,13 @@ function HeroSection() {
             className="mt-6 mb-6 flex flex-col items-center select-none"
           >
             <span
-              className="text-gold-foil font-bold tracking-[0.02em] text-center"
+              className="text-gold-foil font-semibold text-center"
               style={{
-                fontFamily: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-                fontSize: "clamp(3.4rem, 13vw, 5.2rem)",
-                lineHeight: 1.1,
-                fontWeight: 700,
-                textShadow: "0 4px 30px rgba(212, 175, 55, 0.45)",
-                letterSpacing: "0.015em",
+                fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
+                fontSize: "clamp(3.3rem, 12.5vw, 4.8rem)",
+                lineHeight: 1.08,
+                letterSpacing: "0.03em",
+                textShadow: "0 4px 26px rgba(212, 175, 55, 0.4)",
               }}
             >
               {WEDDING_DATA.bride.name}
@@ -432,23 +431,22 @@ function HeroSection() {
             <span
               className="text-gold my-2 font-normal"
               style={{
-                fontFamily: "'Italianno', 'Alex Brush', 'Great Vibes', cursive",
-                fontSize: "clamp(3rem, 10vw, 4.2rem)",
+                fontFamily: "'Pinyon Script', 'Alex Brush', cursive",
+                fontSize: "clamp(2.6rem, 8.5vw, 3.6rem)",
                 lineHeight: 0.85,
-                filter: "drop-shadow(0 2px 14px rgba(212, 175, 55, 0.4))",
+                filter: "drop-shadow(0 2px 12px rgba(212, 175, 55, 0.4))",
               }}
             >
               &amp;
             </span>
             <span
-              className="text-gold-foil font-bold tracking-[0.02em] text-center"
+              className="text-gold-foil font-semibold text-center"
               style={{
-                fontFamily: "'Playfair Display', 'Cormorant Garamond', Georgia, serif",
-                fontSize: "clamp(3.4rem, 13vw, 5.2rem)",
-                lineHeight: 1.1,
-                fontWeight: 700,
-                textShadow: "0 4px 30px rgba(212, 175, 55, 0.45)",
-                letterSpacing: "0.015em",
+                fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
+                fontSize: "clamp(3.3rem, 12.5vw, 4.8rem)",
+                lineHeight: 1.08,
+                letterSpacing: "0.03em",
+                textShadow: "0 4px 26px rgba(212, 175, 55, 0.4)",
               }}
             >
               {WEDDING_DATA.groom.name}
@@ -1184,9 +1182,23 @@ function FooterSection() {
         <FadeIn delay={0.12}>
           <div className="mt-9 flex flex-col items-center">
             <span className="rule-gold w-28" />
-            <p className="text-ivory mt-6 text-3xl sm:text-4xl font-bold tracking-[0.02em] flex items-center justify-center flex-nowrap whitespace-nowrap" style={{ fontFamily: "'Playfair Display', 'Cormorant Garamond', Georgia, serif", fontWeight: 700 }}>
+            <p
+              className="text-ivory mt-6 text-3xl sm:text-4xl font-semibold flex items-center justify-center flex-nowrap whitespace-nowrap"
+              style={{
+                fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
+                letterSpacing: "0.03em",
+              }}
+            >
               <span className="flex-1 text-right">{WEDDING_DATA.bride.name}</span>
-              <span className="text-gold font-normal text-2xl sm:text-3xl px-3 sm:px-4 shrink-0 relative" style={{ fontFamily: "'Alex Brush', 'Great Vibes', cursive", top: "-0.05em" }}>&amp;</span>
+              <span
+                className="text-gold font-normal text-2xl sm:text-3xl px-3 sm:px-4 shrink-0 relative"
+                style={{
+                  fontFamily: "'Pinyon Script', 'Alex Brush', cursive",
+                  top: "-0.04em",
+                }}
+              >
+                &amp;
+              </span>
               <span className="flex-1 text-left">{WEDDING_DATA.groom.name}</span>
             </p>
             <p className="text-ivory/50 mt-2 text-[0.6rem] tracking-[0.4em] uppercase">
@@ -1253,10 +1265,26 @@ function EnvelopeOpener({ onOpen }) {
             <span className="text-gold/80 text-[0.55rem] tracking-[0.5em] uppercase">
               A wedding invitation
             </span>
-            <h1 className="text-gold-foil mt-5 text-4xl sm:text-5xl leading-tight font-bold tracking-[0.02em] flex items-center justify-center flex-nowrap whitespace-nowrap" style={{ fontFamily: "'Playfair Display', 'Cormorant Garamond', Georgia, serif", fontWeight: 700, textShadow: "0 4px 24px rgba(212, 175, 55, 0.4)" }}>
+            <h1
+              className="text-gold-foil mt-5 text-4xl sm:text-5xl leading-tight font-semibold flex items-center justify-center flex-nowrap whitespace-nowrap"
+              style={{
+                fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
+                letterSpacing: "0.03em",
+                textShadow: "0 4px 24px rgba(212, 175, 55, 0.4)",
+              }}
+            >
               <span className="flex-1 text-right">{WEDDING_DATA.bride.name}</span>
-              <span className="text-gold px-2.5 sm:px-3 text-2xl sm:text-3xl font-normal shrink-0 relative" style={{ fontFamily: "'Alex Brush', 'Great Vibes', cursive", filter: "drop-shadow(0 2px 10px rgba(212, 175, 55, 0.35))", top: "-0.05em" }}>&amp;</span>
-              <span className="flex-1 text-left -translate-x-1.5 sm:-translate-x-2">{WEDDING_DATA.groom.name}</span>
+              <span
+                className="text-gold px-2.5 sm:px-3 text-2xl sm:text-3xl font-normal shrink-0 relative"
+                style={{
+                  fontFamily: "'Pinyon Script', 'Alex Brush', cursive",
+                  filter: "drop-shadow(0 2px 10px rgba(212, 175, 55, 0.35))",
+                  top: "-0.04em",
+                }}
+              >
+                &amp;
+              </span>
+              <span className="flex-1 text-left">{WEDDING_DATA.groom.name}</span>
             </h1>
             <span className="rule-gold mt-6 w-32" />
             <motion.button
