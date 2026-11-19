@@ -417,36 +417,39 @@ function HeroSection() {
             className="mt-6 mb-6 flex flex-col items-center select-none"
           >
             <span
-              className="text-gold-foil font-semibold text-center"
+              className="text-gold-foil font-normal text-center"
               style={{
-                fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
-                fontSize: "clamp(3.3rem, 12.5vw, 4.8rem)",
-                lineHeight: 1.08,
-                letterSpacing: "0.03em",
-                textShadow: "0 4px 26px rgba(212, 175, 55, 0.4)",
+                fontFamily: "'Alex Brush', 'Pinyon Script', 'Great Vibes', cursive",
+                fontSize: "clamp(4.2rem, 16vw, 6.4rem)",
+                lineHeight: 1.05,
+                letterSpacing: "0.02em",
+                textShadow: "0 0 1px rgba(230, 202, 101, 0.9), 0 0 1.5px rgba(212, 175, 55, 0.8), 0 4px 28px rgba(212, 175, 55, 0.5)",
+                WebkitTextStroke: "0.45px rgba(212, 175, 55, 0.85)",
               }}
             >
               {WEDDING_DATA.bride.name}
             </span>
             <span
-              className="text-gold my-2 font-normal"
+              className="text-gold my-1 font-normal"
               style={{
                 fontFamily: "'Pinyon Script', 'Alex Brush', cursive",
-                fontSize: "clamp(2.6rem, 8.5vw, 3.6rem)",
+                fontSize: "clamp(2.8rem, 9vw, 3.8rem)",
                 lineHeight: 0.85,
-                filter: "drop-shadow(0 2px 12px rgba(212, 175, 55, 0.4))",
+                filter: "drop-shadow(0 2px 12px rgba(212, 175, 55, 0.5))",
+                WebkitTextStroke: "0.3px rgba(212, 175, 55, 0.8)",
               }}
             >
               &amp;
             </span>
             <span
-              className="text-gold-foil font-semibold text-center"
+              className="text-gold-foil font-normal text-center"
               style={{
-                fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
-                fontSize: "clamp(3.3rem, 12.5vw, 4.8rem)",
-                lineHeight: 1.08,
-                letterSpacing: "0.03em",
-                textShadow: "0 4px 26px rgba(212, 175, 55, 0.4)",
+                fontFamily: "'Alex Brush', 'Pinyon Script', 'Great Vibes', cursive",
+                fontSize: "clamp(4.2rem, 16vw, 6.4rem)",
+                lineHeight: 1.05,
+                letterSpacing: "0.02em",
+                textShadow: "0 0 1px rgba(230, 202, 101, 0.9), 0 0 1.5px rgba(212, 175, 55, 0.8), 0 4px 28px rgba(212, 175, 55, 0.5)",
+                WebkitTextStroke: "0.45px rgba(212, 175, 55, 0.85)",
               }}
             >
               {WEDDING_DATA.groom.name}
@@ -1183,10 +1186,12 @@ function FooterSection() {
           <div className="mt-9 flex flex-col items-center">
             <span className="rule-gold w-28" />
             <p
-              className="text-ivory mt-6 text-3xl sm:text-4xl font-semibold flex items-center justify-center flex-nowrap whitespace-nowrap"
+              className="text-ivory mt-6 text-3xl sm:text-4xl font-normal flex items-center justify-center flex-nowrap whitespace-nowrap"
               style={{
-                fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
-                letterSpacing: "0.03em",
+                fontFamily: "'Alex Brush', 'Pinyon Script', 'Great Vibes', cursive",
+                fontSize: "clamp(2.1rem, 7.5vw, 3.2rem)",
+                letterSpacing: "0.02em",
+                WebkitTextStroke: "0.35px rgba(255, 255, 255, 0.6)",
               }}
             >
               <span className="flex-1 text-right">{WEDDING_DATA.bride.name}</span>
@@ -1195,6 +1200,7 @@ function FooterSection() {
                 style={{
                   fontFamily: "'Pinyon Script', 'Alex Brush', cursive",
                   top: "-0.04em",
+                  WebkitTextStroke: "0.25px rgba(212, 175, 55, 0.7)",
                 }}
               >
                 &amp;
@@ -1266,11 +1272,13 @@ function EnvelopeOpener({ onOpen }) {
               A wedding invitation
             </span>
             <h1
-              className="text-gold-foil mt-5 text-4xl sm:text-5xl leading-tight font-semibold flex items-center justify-center flex-nowrap whitespace-nowrap"
+              className="text-gold-foil mt-5 text-4xl sm:text-5xl leading-tight font-normal flex items-center justify-center flex-nowrap whitespace-nowrap"
               style={{
-                fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
-                letterSpacing: "0.03em",
-                textShadow: "0 4px 24px rgba(212, 175, 55, 0.4)",
+                fontFamily: "'Alex Brush', 'Pinyon Script', 'Great Vibes', cursive",
+                fontSize: "clamp(2.5rem, 9.5vw, 4rem)",
+                letterSpacing: "0.02em",
+                textShadow: "0 0 1px rgba(230, 202, 101, 0.85), 0 0 1.5px rgba(212, 175, 55, 0.75), 0 4px 26px rgba(212, 175, 55, 0.45)",
+                WebkitTextStroke: "0.4px rgba(212, 175, 55, 0.85)",
               }}
             >
               <span className="flex-1 text-right">{WEDDING_DATA.bride.name}</span>
@@ -1278,8 +1286,9 @@ function EnvelopeOpener({ onOpen }) {
                 className="text-gold px-2.5 sm:px-3 text-2xl sm:text-3xl font-normal shrink-0 relative"
                 style={{
                   fontFamily: "'Pinyon Script', 'Alex Brush', cursive",
-                  filter: "drop-shadow(0 2px 10px rgba(212, 175, 55, 0.35))",
+                  filter: "drop-shadow(0 2px 10px rgba(212, 175, 55, 0.4))",
                   top: "-0.04em",
+                  WebkitTextStroke: "0.25px rgba(212, 175, 55, 0.8)",
                 }}
               >
                 &amp;
